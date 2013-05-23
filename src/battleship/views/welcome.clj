@@ -4,5 +4,6 @@
   (:use [noir.core :only [defpage]]))
 
 (defpage "/welcome" []
-         (common/layout
-           [:p "Welcome to battleship"]))
+  (common/layout
+   [:h1 "Some text here :3"]
+   [:p "Welcome to battleship"]))

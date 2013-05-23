@@ -4,3 +4,5 @@
                            [noir "1.3.0-beta3"]]
             :main battleship.server)
 
+; board: 20x20
+
