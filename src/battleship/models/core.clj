@@ -9,10 +9,8 @@
 (def shot "x")
 (def new-line "\n")
 
-(def bs-board-a (atom {}))
-(def bs-board-a-shot (atom {}))
-(def bs-board-b (atom {}))
-(def bs-board-b-shot (atom {}))
+(def bs-player-a (atom {:board {}, :shot {}}))
+(def bs-player-b (atom {:board {}, :shot {}}))
 
 (def bs-cell-get
   (fn [board coordinates]
@@ -46,9 +44,10 @@
             {:name "submarine", :size 1, :amount 2}])
 
 
+;; Making a move
+(def bs-shoot
+  (fn [player]
+    ))
 
 ;; Randomised ship setup
-
-
-;; Making a move
 
