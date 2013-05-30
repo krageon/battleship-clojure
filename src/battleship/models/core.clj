@@ -74,12 +74,6 @@
         true)
       false)))
 
-(do
-  (bs-ship-put bs-player-a "battleship" "horizontal" [0 1])
-  (bs-ship-put bs-player-a "battleship" "vertical" [0 0]))
-
-(println (bs-board-string (:board @bs-player-a)))
-
 ;; Making a move
 (def bs-shoot
   (fn [coordinates player opponent]
