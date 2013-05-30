@@ -56,7 +56,7 @@
     (if-not (>= offset (:size (bs-ship-get ship)))
       (if (= default (bs-cell-get (:board @player) (bs-ship-coordinate-offset orientation coordinates offset)))
         (recur (inc offset))
-        (do (println "false") false))
+        false)
       true))
   )
 
