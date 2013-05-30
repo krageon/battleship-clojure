@@ -6,10 +6,13 @@
 (def default "~")
 (def boat "o")
 (def hit "*")
+(def shot "x")
 (def new-line "\n")
 
 (def bs-board-a (atom {}))
+(def bs-board-a-shot (atom {}))
 (def bs-board-b (atom {}))
+(def bs-board-b-shot (atom {}))
 
 (def bs-cell-get
   (fn [board coordinates]
@@ -18,13 +21,13 @@
         default
         at-coordinates))))
 
-; converting the board (a sparse array-thing) to a string, filling in the gaps
+; converting a board (a sparse array-thing) to a string, filling in the gaps
 (def bs-board-string
   (fn [board]
     (loop [x 0
-           maxX 20
+           maxX 10
            y 0
-           maxY 20
+           maxY 10
            string ""]
       (if (> y maxY)
         string
@@ -36,6 +39,12 @@
     ))
 
 ;; Picking ship locations
+(def ships [{:name "aircraft carrier", :size 5, :amount 1},
+            {:name "battleship", :size 4, :amount 1},
+            {:name "cruiser", :size 3, :amount 1},
+            {:name "destroyer", :size 2, :amount 2},
+            {:name "submarine", :size 1, :amount 2}])
+
 
 
 ;; Randomised ship setup
