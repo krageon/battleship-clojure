@@ -6,7 +6,7 @@
   [& content]
    (html5
     [:head
-     [:title "battleship"]
+     [:title "Clojure Project: Epic Battleship"]
      (include-css "/css/reset.css")]
     [:body
      [:div#wrapper

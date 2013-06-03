@@ -1,7 +1,12 @@
 (ns battleship.views.welcome
-  (:require [battleship.views.common :as common]
-            [noir.content.getting-started])
+  (:require [battleship.views.common :as common])
   (:use [noir.core :only [defpage]]))
+
+(defpage "/" []
+  (common/layout
+   [:h1 "Lamamamama"]
+   [:p "Hele zinnige  tekst"]))
+
 
 (defpage "/welcome" []
   (common/layout
