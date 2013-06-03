@@ -76,8 +76,10 @@
 (defn bs-player-has-ship? [player ship]
   ((comp not nil?) (bs-ship-get ship (:ships @player))))
 
+(bs-player-has-ship? bs-player-a "destroyer")
+
 (defn bs-player-ship-at [player ship]
-  (.indexOf (:ships @player) (bs-ship-get ship)))
+  (.indexOf (:ships @player) (bs-ship-get ship (:ships @player))))
 
 (bs-ship-is-available bs-player-a "taco")
 
@@ -86,7 +88,7 @@
        ((comp not nil?) (bs-ship-get ship))
        (bs-ship-is-available player ship))
     (loop [offset 0]
-      (if (try (<= offset (:size (bs-ship-get ship)))
+      (if (try (<= offset (:size (bs-ship-get ship))) ; refactor to use fnil?
             (catch Exception e false)
             )
         (if (= default (bs-cell-get (:board @player) (bs-ship-coordinate-offset orientation coordinates offset)))
@@ -103,14 +105,7 @@
   (#(get-in % [:ships]) @player)
   )
 
-(swap! bs-player-a update-in [:ships] #(into % [(bs-ship-get "aircraft carrier")]))
-;(update-in @bs-player-a [:ships] #(into % [(bs-ship-get "aircraft carrier")]))
-;(:ships @bs-player-a)
-;(bs-player-ship-at bs-player-a "aircraft carrier")
-;(let [ship "aircraft carrier"
-;      player bs-player-a]
-;  (#(assoc-in % [:ships (bs-player-ship-at player ship) :amount] 1) @player)
-;  )
+;(swap! bs-player-a update-in [:ships] #(into % [(bs-ship-get "aircraft carrier")]))
 
 
 (def bs-ship-put
@@ -125,20 +120,37 @@
               (recur (inc offset)))
             ))
         (let [ship-amount (if (bs-player-has-ship? player ship)
-                              (inc (:amount (bs-ship-get ship)))
+                              (inc (:amount (bs-ship-get ship (:ships @player))))
                               1),
-              ship-to-add (bs-ship-get ship)]
+              ship-to-add (assoc-in (bs-ship-get ship) [:amount] ship-amount)]
         (do
-          (assoc-in ship-to-add [:amount] ship-amount)
           (if (bs-player-has-ship? player ship)
-            (swap! player update-in [:ships (bs-player-ship-at ship)] ship-to-add)
+            (swap! player update-in [:ships (bs-player-ship-at player ship)] (fn [x] ship-to-add))
             (swap! player update-in [:ships] #(into % [ship-to-add]))
             )
           ))
         true)
       false)))
 
-;(bs-ship-put bs-player-a "aircraft carrier" "horizontal" [0 0])
+(:board @bs-player-a)
+(bs-ship-put bs-player-a "aircraft carrier" "horizontal" [0 0])
+(:board @bs-player-a)
+(bs-ship-put bs-player-a "aircraft carrier" "horizontal" [0 0])
+(bs-ship-put bs-player-a "aircraft carrier" "horizontl"[0 0])
+(bs-ship-put bs-player-a "destroyer" "horizontal" [0 1])
+(:board @bs-player-a)
+(:ships @bs-player-a)
+(< (:amount (bs-ship-get "destroyer" (:ships @bs-player-a))) (:amount (bs-ship-get "destroyer")))
+(bs-ship-is-available bs-player-a "destroyer")
+(:amount (bs-ship-get "destroyer" (:ships @bs-player-a)))
+
+(bs-player-ship-at bs-player-a "destroyer")
+(bs-ship-get "destroyer")
+(bs-ship-put bs-player-a "destroyer" "horizontal" [0 2])
+
+(println (bs-board-string (:board @bs-player-a)))
+(:ships @bs-player-a)
+
 
 ;; Making a move
 (def bs-shoot
