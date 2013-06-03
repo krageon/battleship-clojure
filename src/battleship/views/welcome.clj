@@ -1,9 +1,17 @@
 (ns battleship.views.welcome
-  (:require [battleship.views.common :as common]
-            [noir.content.getting-started])
+  (:require [battleship.views.common :as common])
   (:use [noir.core :only [defpage]]))
 
-(defpage "/welcome" []
+(defn createBoard[]
+  "Returns a clean board"
+  (str
+     "<table>"
+     (reduce str(repeat 11(str "<tr>"(reduce str(repeat 11 "<td>&nbsp;</td>")) "</tr>")))
+     "</table>"
+   )
+  )
+
+(defpage "/" []
   (common/layout
-   [:h1 "Some text here :3"]
-   [:p "Welcome to battleship"]))
+   [:h1 "Clojure Project: Epic Battleship"]
+   [:div#board (createBoard)]))
