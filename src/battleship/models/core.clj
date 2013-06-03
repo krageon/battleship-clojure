@@ -103,15 +103,14 @@
   (#(get-in % [:ships]) @player)
   )
 
-(update-in @bs-player-a [:ships] #(into % [(bs-ship-get "aircraft carrier")]))
 (swap! bs-player-a update-in [:ships] #(into % [(bs-ship-get "aircraft carrier")]))
-(:ships @bs-player-a)
-(bs-player-ship-at bs-player-a "aircraft carrier")
-
-(let [ship "aircraft carrier"
-      player bs-player-a]
-  (#(assoc-in % [:ships (bs-player-ship-at player ship) :amount] 1) @player)
-  )
+;(update-in @bs-player-a [:ships] #(into % [(bs-ship-get "aircraft carrier")]))
+;(:ships @bs-player-a)
+;(bs-player-ship-at bs-player-a "aircraft carrier")
+;(let [ship "aircraft carrier"
+;      player bs-player-a]
+;  (#(assoc-in % [:ships (bs-player-ship-at player ship) :amount] 1) @player)
+;  )
 
 
 (def bs-ship-put
@@ -125,15 +124,21 @@
                                        boat))
               (recur (inc offset)))
             ))
-        (let [currentAmount (if (bs-player-has-ship? player ship)
-                              (:amount (bs-ship-get ship))
-                              0)])
-        (swap! player #(assoc-in % [:ships (bs-ship-get ship)] ))
+        (let [ship-amount (if (bs-player-has-ship? player ship)
+                              (inc (:amount (bs-ship-get ship)))
+                              1),
+              ship-to-add (bs-ship-get ship)]
+        (do
+          (assoc-in ship-to-add [:amount] ship-amount)
+          (if (bs-player-has-ship? player ship)
+            (swap! player update-in [:ships (bs-player-ship-at ship)] ship-to-add)
+            (swap! player update-in [:ships] #(into % [ship-to-add]))
+            )
+          ))
         true)
       false)))
 
-(bs-ship-put bs-player-a "aircraft carrier" "horizontal" [0 0])
-
+;(bs-ship-put bs-player-a "aircraft carrier" "horizontal" [0 0])
 
 ;; Making a move
 (def bs-shoot
