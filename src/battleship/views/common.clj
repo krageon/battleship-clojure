@@ -7,7 +7,7 @@
    (html5
     [:head
      [:title "Clojure Project: Epic Battleship"]
-     (include-css "/css/reset.css")]
+     (include-css "/css/stylesheet.css")]
     [:body
      [:div#wrapper
       content]]))
