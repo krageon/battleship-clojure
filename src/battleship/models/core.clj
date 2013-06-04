@@ -1,4 +1,22 @@
 ;; Battleship in clojure core
+(use 'clojure.string)
+
+;; use these as an interface:
+; bs-ship-put: (fn [player ship orientation coordinates]) ; coordinates are top or left, respectively
+; (bs-board-string (:board player-data)) ; player a or b as required, :board and :shot as required
+; (coord-display-to-backend "A2") ;=> [0 1]
+
+(def examplecoord "J2")
+(def coord-display-to-backend
+  (let [xcharoffset (int \A)]
+    (fn [x]
+      (let [letter (first x),
+            number ((comp str first rest) x)]
+        [(- (int letter) xcharoffset) (- (Integer/parseInt number) 1)]))))
+
+;(map #(- (int %) xcharoffset) (seq examplecoord))
+(def ca (char 65))
+(def ia (int ca))
 
 ;; Printing the board
 
@@ -9,6 +27,7 @@
 (def shot "/")
 (def new-line "\n")
 
+; Move this to the noir session stuff
 (def bs-player-a (atom
                   {:board {},
                    :shot {},
@@ -76,8 +95,6 @@
 (defn bs-player-has-ship? [player ship]
   ((comp not nil?) (bs-ship-get ship (:ships @player))))
 
-(bs-player-has-ship? bs-player-a "destroyer")
-
 (defn bs-player-ship-at [player ship]
   (.indexOf (:ships @player) (bs-ship-get ship (:ships @player))))
 
@@ -99,14 +116,6 @@
 
 (bs-ship-put-is-legal? bs-player-a "aircraft carrier" "horizontal" [0 0]) ;=> true
 (bs-ship-put-is-legal? bs-player-a "taco" "horizontal" [0 0]) ;=> false
-
-(let [ship "aircraft carrier"
-      player bs-player-a]
-  (#(get-in % [:ships]) @player)
-  )
-
-;(swap! bs-player-a update-in [:ships] #(into % [(bs-ship-get "aircraft carrier")]))
-
 
 (def bs-ship-put
   (fn [player ship orientation coordinates] ; coordinates are top or left, respectively
@@ -132,26 +141,6 @@
         true)
       false)))
 
-(:board @bs-player-a)
-(bs-ship-put bs-player-a "aircraft carrier" "horizontal" [0 0])
-(:board @bs-player-a)
-(bs-ship-put bs-player-a "aircraft carrier" "horizontal" [0 0])
-(bs-ship-put bs-player-a "aircraft carrier" "horizontl"[0 0])
-(bs-ship-put bs-player-a "destroyer" "horizontal" [0 1])
-(:board @bs-player-a)
-(:ships @bs-player-a)
-(< (:amount (bs-ship-get "destroyer" (:ships @bs-player-a))) (:amount (bs-ship-get "destroyer")))
-(bs-ship-is-available bs-player-a "destroyer")
-(:amount (bs-ship-get "destroyer" (:ships @bs-player-a)))
-
-(bs-player-ship-at bs-player-a "destroyer")
-(bs-ship-get "destroyer")
-(bs-ship-put bs-player-a "destroyer" "horizontal" [0 2])
-
-(println (bs-board-string (:board @bs-player-a)))
-(:ships @bs-player-a)
-
-
 ;; Making a move
 (def bs-shoot
   (fn [coordinates player opponent]
@@ -162,4 +151,3 @@
                         shot)))))
 
 ;; Randomised ship setup
-
