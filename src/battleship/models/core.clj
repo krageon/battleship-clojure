@@ -1,5 +1,4 @@
 ;; Battleship in clojure core
-(use 'clojure.string)
 
 ;; use these as an interface:
 ; bs-ship-put: (fn [player ship orientation coordinates]) ; coordinates are top or left, respectively
@@ -13,10 +12,6 @@
       (let [letter (first x),
             number ((comp str first rest) x)]
         [(- (int letter) xcharoffset) (- (Integer/parseInt number) 1)]))))
-
-;(map #(- (int %) xcharoffset) (seq examplecoord))
-(def ca (char 65))
-(def ia (int ca))
 
 ;; Printing the board
 
@@ -87,16 +82,16 @@
 
 (defn bs-ship-is-available [player ship]
   (or
-   (nil? (bs-ship-get ship (:ships @player)))
-   (try (< (:amount (bs-ship-get ship (:ships @player))) (:amount (bs-ship-get ship)))
+   (nil? (bs-ship-get ship (:ships player)))
+   (try (< (:amount (bs-ship-get ship (:ships player))) (:amount (bs-ship-get ship)))
      (catch Exception e false))
    ))
 
 (defn bs-player-has-ship? [player ship]
-  ((comp not nil?) (bs-ship-get ship (:ships @player))))
+  ((comp not nil?) (bs-ship-get ship (:ships player))))
 
 (defn bs-player-ship-at [player ship]
-  (.indexOf (:ships @player) (bs-ship-get ship (:ships @player))))
+  (.indexOf (:ships player) (bs-ship-get ship (:ships player))))
 
 (bs-ship-is-available bs-player-a "taco")
 
@@ -124,8 +119,7 @@
         (loop [offset 0]
           (if-not (>= offset (:size (bs-ship-get ship)))
             (do
-              (swap! player #(assoc-in % [:board (bs-ship-coordinate-offset orientation coordinates offset)]
-                                       boat))
+              (assoc-in player :board (bs-ship-coordinate-offset orientation coordinates offset)] boat)
               (recur (inc offset)))
             ))
         (let [ship-amount (if (bs-player-has-ship? player ship)
@@ -134,20 +128,19 @@
               ship-to-add (assoc-in (bs-ship-get ship) [:amount] ship-amount)]
         (do
           (if (bs-player-has-ship? player ship)
-            (swap! player update-in [:ships (bs-player-ship-at player ship)] (fn [x] ship-to-add))
-            (swap! player update-in [:ships] #(into % [ship-to-add]))
+            (update-in player [:ships (bs-player-ship-at player ship)] (fn [x] ship-to-add))
+            (update-in player [:ships] #(into % [ship-to-add]))
             )
           ))
-        true)
-      false)))
+        player)
+      nil)))
 
 ;; Making a move
 (def bs-shoot
   (fn [coordinates player opponent]
-    (swap! player
-           #(assoc-in % [:shot coordinates]
-                      (if (= boat (bs-cell-get (:board @opponent)))
-                        hit
-                        shot)))))
+    (assoc-in player [:shot coordinates]
+              (if (= boat (bs-cell-get (:board opponent)))
+                hit
+                shot))))
 
 ;; Randomised ship setup
