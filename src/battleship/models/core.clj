@@ -5,7 +5,6 @@
 ; (bs-board-string (:board player-data)) ; player a or b as required, :board and :shot as required
 ; (coord-display-to-backend "A2") ;=> [0 1]
 
-(def examplecoord "J2")
 (def coord-display-to-backend
   (let [xcharoffset (int \A)]
     (fn [x]
@@ -103,7 +102,7 @@
       (if (try (<= offset (:size (bs-ship-get ship))) ; refactor to use fnil?
             (catch Exception e false)
             )
-        (if (= default (bs-cell-get (:board @player) (bs-ship-coordinate-offset orientation coordinates offset)))
+        (if (= default (bs-cell-get (:board player) (bs-ship-coordinate-offset orientation coordinates offset)))
           (recur (inc offset))
           false)
         true))
@@ -123,7 +122,7 @@
               (recur (inc offset)))
             ))
         (let [ship-amount (if (bs-player-has-ship? player ship)
-                              (inc (:amount (bs-ship-get ship (:ships @player))))
+                              (inc (:amount (bs-ship-get ship (:ships player))))
                               1),
               ship-to-add (assoc-in (bs-ship-get ship) [:amount] ship-amount)]
         (do
