@@ -5,12 +5,12 @@
 ; (bs-board-string (:board player-data)) ; player a or b as required, :board and :shot as required
 ; (coord-display-to-backend "A2") ;=> [0 1]
 
-(def coord-display-to-backend
-  (let [xcharoffset (int \A)]
-    (fn [x]
-      (let [letter (first x),
-            number ((comp str first rest) x)]
-        [(- (int letter) xcharoffset) (- (Integer/parseInt number) 1)]))))
+;(def coord-display-to-backend
+;  (let [xcharoffset (int \A)]
+;    (fn [x]
+;      (let [letter (first x),
+;            number ((comp str first rest) x)]
+;        [(- (int letter) xcharoffset) (- (Integer/parseInt number) 1)]))))
 
 ;; Printing the board
 
@@ -22,14 +22,9 @@
 (def new-line "\n")
 
 ; Move this to the noir session stuff
-(def bs-player-a (atom
-                  {:board {},
-                   :shot {},
-                   :ships []}))
-(def bs-player-b (atom
-                  {:board {},
-                   :shot {}},
-                  :ships []))
+(def bs-player-a {:board {},
+                  :shot {},
+                  :ships []})
 
 (def bs-cell-get
   (fn [board coordinates]
@@ -108,31 +103,33 @@
         true))
     false))
 
+;(bs-ship-put bs-player-a "aircraft carrier" "horizontal" [1 1])
+
 (bs-ship-put-is-legal? bs-player-a "aircraft carrier" "horizontal" [0 0]) ;=> true
-(bs-ship-put-is-legal? bs-player-a "taco" "horizontal" [0 0]) ;=> false
+;(bs-ship-put-is-legal? bs-player-a "taco" "horizontal" [0 0]) ;=> false
+
+(def bs-ship-draw
+  (fn [player ship orientation coordinates]
+    (loop [offset 0
+           p player]
+      (if-not (>= offset (:size (bs-ship-get ship)))
+        (recur (inc offset)) (assoc-in p [:board (bs-ship-coordinate-offset orientation coordinates offset)] boat)
+        p))))
 
 (def bs-ship-put
   (fn [player ship orientation coordinates] ; coordinates are top or left, respectively
     (if (bs-ship-put-is-legal? player ship orientation coordinates)
-      (do
-        (loop [offset 0]
-          (if-not (>= offset (:size (bs-ship-get ship)))
-            (do
-              (assoc-in player :board (bs-ship-coordinate-offset orientation coordinates offset)] boat)
-              (recur (inc offset)))
-            ))
-        (let [ship-amount (if (bs-player-has-ship? player ship)
-                              (inc (:amount (bs-ship-get ship (:ships player))))
-                              1),
-              ship-to-add (assoc-in (bs-ship-get ship) [:amount] ship-amount)]
-        (do
-          (if (bs-player-has-ship? player ship)
-            (update-in player [:ships (bs-player-ship-at player ship)] (fn [x] ship-to-add))
-            (update-in player [:ships] #(into % [ship-to-add]))
-            )
-          ))
-        player)
-      nil)))
+      (let [ship-amount (if (bs-player-has-ship? player ship)
+                          (inc (:amount (bs-ship-get ship (:ships player))))
+                          1),
+            ship-to-add (assoc-in (bs-ship-get ship) [:amount] ship-amount)
+            p (bs-ship-draw player ship orientation coordinates)]
+        (if (bs-player-has-ship? p ship)
+          (update-in p [:ships (bs-player-ship-at p ship)] (fn [x] ship-to-add))
+          (update-in p [:ships] #(into % [ship-to-add]))))
+      player)))
+
+(bs-ship-put bs-player-a "aircraft carrier" "horizontal" [0 0])
 
 ;; Making a move
 (def bs-shoot
@@ -141,5 +138,7 @@
               (if (= boat (bs-cell-get (:board opponent)))
                 hit
                 shot))))
+
+
 
 ;; Randomised ship setup
