@@ -259,3 +259,10 @@ table tr:nth-child(2n) {
 img {
   max-width: 100%
 }
+
+/* SPECIFIC
+=============================================================================*/
+div#wrapper td:hover
+{
+	cursor:pointer;
+}
