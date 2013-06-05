@@ -6,9 +6,9 @@
 
 (def empty-board [["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
                   ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
+                  ["~" "~" "o" "~" "~" "~" "~" "~" "~" "~"]
                   ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
-                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
-                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
+                  ["~" "~" "~" "x" "/" "~" "~" "~" "~" "~"]
                   ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
                   ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
                   ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
@@ -37,11 +37,24 @@
                            (make-row yCoord row with-submit?))
                          board)]))
 
+(defn instruction[]
+  (html
+     [:p#legenda [:h3 "Legenda:"]
+                 [:table
+                  [:tr [:td {:value "~"} "~"][:td "This is water"]]
+                  [:tr [:td {:value "/"} "/"][:td "This means the shot missed"]]
+                  [:tr [:td {:value "o"} "o"][:td "This is a part of a ship"]]
+                  [:tr [:td {:value "x"} "x"][:td "This is a hit!"]]
+                  [:tr [:td {:value "x" :style "background-color: rgb(227, 188, 185);"} "x"][:td "This means you're hit"]]
+                  ]]
+
+   ))
+
 ;; index page
 (defpage "/" []
   (common/layout
    [:h1 "Clojure Project: Epic Battleship"]
    [:div#board (make-board empty-board "axis" true)]
-   [:div#right-menu (make-board empty-board "allies" true) [:p#instruction "Here is some space for instructions."]]
+   [:div#right-menu (make-board empty-board "allies" true) (instruction)]
    )
   )
