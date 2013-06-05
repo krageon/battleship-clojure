@@ -56,13 +56,13 @@ h1 {
 }
 
 h2 {
-  font-size: 24px;
+  font-size: 14px;
   border-bottom: 1px solid #ccc;
   color: #000;
 }
 
 h3 {
-  font-size: 18px;
+  font-size: 14px;
 }
 
 h4 {
@@ -262,7 +262,26 @@ img {
 
 /* SPECIFIC
 =============================================================================*/
-div#wrapper td:hover
-{
+#wrapper{
+  width: 976px;
+}
+
+#wrapper #board{
+  width: 640 px;
+  float: left;
+  margin-right: 50px;
+}
+
+#wrapper #right-menu{
+  width: 325 px;
+  float: left;
+}
+
+div#wrapper table#axis td:hover{
 	cursor:pointer;
+}
+
+div#wrapper table#allies th, table#allies td{
+  font-size: 8px;
+  padding: 4px 5px;
 }

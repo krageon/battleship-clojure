@@ -1,46 +1,47 @@
 (ns battleship.views.pages
   (:require [battleship.views.common :as common])
   (:use [hiccup.core])
+  (:use [hiccup.form])
   (:use [noir.core :only [defpage]]))
 
-(defn cell-html[yCoord xCoord value with-submit?]
-  [:td {:name (str yCoord xCoord) :type (if with-submit? "submit" "") :value value} (str "&nbsp;" value "&nbsp;")]
+(def empty-board [["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
+                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
+                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
+                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
+                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
+                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
+                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
+                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
+                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
+                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]])
+
+
+(defn make-cell [yCoord xCoord value with-submit?]
+  [:td {:name (str (char (+ 65 yCoord)) xCoord) :type (if with-submit? "submit" "") :value value} (str "&nbsp;" value "&nbsp;")]
   )
 
-(defn createBoard[]
-  "Returns a clean table board"
-  []
-  (html
-   [:post "/"]
-   [:table
-         [:tr
-          [:th {:style "border: 0px"} "&nbsp;&nbsp;"]
-          (for [x (range 1 11)] [:th x])
-          ]
-         (for [y (map char(range 65 75))] [:tr
-                                           [:th y]
-                                           (for [x (range 1 11)] (cell-html y x "~" true))
-                                           ])
-         ])
-  )
+(defn make-row [yCoord row with-submit?]
+  [:tr  [:td (str (char (+ yCoord 65)))](map-indexed (fn [xCoord cell]
+                      (make-cell yCoord (+ 1 xCoord) cell with-submit?))
+                    row)])
 
-(defn makeMove
-  "Give Coordinates and the action, and it will set it."
-  [params]
-  (let[x (second params), y (first params), action (last params)]
-    into [:td#A1 action])
-  )
-
-
-
+(defn make-board [board id with-submit?]
+  (form-to [:post "/"]
+           [:h2 "This is the " id " board"]
+           [:table {:id id}
+            [:tr
+              [:th {:style "border: 0px"} "&nbsp;&nbsp;"]
+              (for [x (range 1 11)] [:th x])
+              ]
+            (map-indexed (fn [yCoord row]
+                           (make-row yCoord row with-submit?))
+                         board)]))
 
 ;; index page
 (defpage "/" []
   (common/layout
    [:h1 "Clojure Project: Epic Battleship"]
-   [:div#board (createBoard)]
+   [:div#board (make-board empty-board "axis" true)]
+   [:div#right-menu (make-board empty-board "allies" true) [:p#instruction "Here is some space for instructions."]]
    )
   )
-
-
-
