@@ -1,7 +1,7 @@
 (ns battleship.server
   (:require [noir.server :as server]))
 
-(server/load-views-ns 'battleship.views)
+(server/load-views-ns 'battleship.models.controller)
 
 (defn -main [& m]
   (let [mode (keyword (or (first m) :dev))
