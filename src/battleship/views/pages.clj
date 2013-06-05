@@ -3,14 +3,16 @@
   (:use [hiccup.core])
   (:use [noir.core :only [defpage]]))
 
-(defn cell-html[yCoord xCoord value withSubmit?]
-  [:td {:name (str yCoord xCoord) :type (if withSubmit? "submit" "") :value value} (str "&nbsp;" value "&nbsp;")]
+(defn cell-html[yCoord xCoord value with-submit?]
+  [:td {:name (str yCoord xCoord) :type (if with-submit? "submit" "") :value value} (str "&nbsp;" value "&nbsp;")]
   )
 
 (defn createBoard[]
   "Returns a clean table board"
   []
-  (html [:table
+  (html
+   [:post "/"]
+   [:table
          [:tr
           [:th {:style "border: 0px"} "&nbsp;&nbsp;"]
           (for [x (range 1 11)] [:th x])
