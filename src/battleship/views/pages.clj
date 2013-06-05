@@ -17,7 +17,7 @@
 
 
 (defn make-cell [yCoord xCoord value with-submit?]
-  [:td {:name (str (char (+ 65 yCoord)) xCoord) :type (if with-submit? "submit" "") :value value} (str "&nbsp;" value "&nbsp;")]
+  [:td {:name (str (char (+ 65 yCoord)) xCoord) :type (if with-submit? "submit" "") :value value :title (str (char (+ 65 yCoord)) xCoord)} (str "&nbsp;" value "&nbsp;")]
   )
 
 (defn make-row [yCoord row with-submit?]

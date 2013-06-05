@@ -243,7 +243,7 @@ table th, table td {
   padding: 6px 13px;
 }
 
-table#axis td:hover{
+table#axis td[value="~"]:hover{
   border: 1px solid #7A7A7A;
 }
 
@@ -283,7 +283,7 @@ img {
   float: left;
 }
 
-div#wrapper table#axis td:hover{
+div#wrapper table#axis td[value="~"]:hover{
 	cursor:pointer;
 }
 
