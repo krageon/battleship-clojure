@@ -1,5 +1,7 @@
 ;; Battleship in clojure core
 
+(ns battleship.models.core)
+
 ;; use these as an interface:
 ; bs-ship-put: (fn [player ship orientation coordinates]) ; coordinates are top or left, respectively
 ; (bs-board-string (:board player-data)) ; player a or b as required, :board and :shot as required
@@ -33,41 +35,54 @@
         default
         at-coordinates))))
 
-; converting a board (a sparse array-thing) to a string, filling in the gaps
-(def bs-board-string
-  (fn [board]
+(def bs-board-line
+  (fn [board maxX y]
     (loop [x 0
-           maxX 10
+           result []]
+      (if (< maxX x)
+        (recur (inc x) (assoc result (bs-cell-get board [x y])))
+        result))))
+
+; converting a board (a sparse array-thing) to a string, filling in the gaps
+(def bs-board
+  (fn [board]
+    (loop [maxX 10
            y 0
            maxY 10
-           string ""]
+           result []]
       (if (> y maxY)
-        string
-        (if (> x maxX)
-          (recur 0 maxX (inc y) maxY (str string new-line))
-          (recur (inc x) maxX y maxY (str string (bs-cell-get board [x y]))))
-        )
-      )
-    ))
+        result
+        (recur maxX y maxY (assoc result (count result) [(bs-board-line board maxX y)]))))))
 
 ;; Picking ship locations
-(def ships [{:name "aircraft carrier", :size 5, :amount 1},
-            {:name "battleship", :size 4, :amount 1},
-            {:name "cruiser", :size 3, :amount 1},
-            {:name "destroyer", :size 2, :amount 2},
-            {:name "submarine", :size 1, :amount 2}])
+(def ships [{:name "Aircraft Carrier"
+             :amount "1"
+             :size "5"}
+            {:name "Battleship"
+             :amount "1"
+             :size "4"}
+            {:name "Cruiser"
+             :amount "1"
+             :size "3"}
+            {:name "Destroyer"
+             :amount "2"
+             :size "2"}
+            {:name "Submarine"
+             :amount "2"
+             :size "1"}
+            ])
 
 (defn bs-ship-get
   ([n] (bs-ship-get n ships))
   ([n ships] (first (filter #(= n (:name %)) ships))))
 
-(bs-ship-get "taco") ;=> nil
+;(bs-ship-get "taco") ;=> nil
 
 (defn bs-ship-get-all
   ([n] (bs-ship-get-all n ships))
   ([n ships] (filter #(= n (:name %)) ships)))
 
-(bs-ship-get-all "taco") ;=> ()
+;(bs-ship-get-all "taco") ;=> ()
 
 (defn bs-ship-coordinate-offset [orientation coordinates offset]
   (if (= "horizontal" orientation)
@@ -87,7 +102,7 @@
 (defn bs-player-ship-at [player ship]
   (.indexOf (:ships player) (bs-ship-get ship (:ships player))))
 
-(bs-ship-is-available bs-player-a "taco")
+;(bs-ship-is-available bs-player-a "taco")
 
 (defn bs-ship-put-is-legal? [player ship orientation coordinates]
   (if (and
@@ -105,7 +120,7 @@
 
 ;(bs-ship-put bs-player-a "aircraft carrier" "horizontal" [1 1])
 
-(bs-ship-put-is-legal? bs-player-a "aircraft carrier" "horizontal" [0 0]) ;=> true
+;(bs-ship-put-is-legal? bs-player-a "aircraft carrier" "horizontal" [0 0]) ;=> true
 ;(bs-ship-put-is-legal? bs-player-a "taco" "horizontal" [0 0]) ;=> false
 
 (def bs-ship-draw
@@ -113,7 +128,7 @@
     (loop [offset 0
            p player]
       (if-not (>= offset (:size (bs-ship-get ship)))
-        (recur (inc offset)) (assoc-in p [:board (bs-ship-coordinate-offset orientation coordinates offset)] boat)
+        (recur (inc offset) (assoc-in p [:board (bs-ship-coordinate-offset orientation coordinates offset)] boat))
         p))))
 
 (def bs-ship-put
