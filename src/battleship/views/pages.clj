@@ -1,7 +1,7 @@
 (ns battleship.views.pages
   (:use [hiccup.core])
   (:use [hiccup.form])
-  (:use [hiccup.page :only [include-css html5]])
+  (:use [hiccup.page :only [include-css include-js html5]])
   (:use [noir.core :only [defpartial]])
   (:use [noir.core :only [defpage]]))
 
@@ -17,7 +17,7 @@
                   ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]])
 
 (defn ships [] [{:name "Aircraft Carrier"
-                 :amount "1"
+                 :amountx "1"
                  :size "5"}
                 {:name "Battleship"
                  :amount "1"
@@ -43,6 +43,17 @@
   [:tr  [:td {:class "notboard"}(str (char (+ yCoord 65)))](map-indexed (fn [xCoord cell]
                                                                           (make-cell yCoord (+ 1 xCoord) cell with-submit?))
                                                                         row)])
+
+(defn make-placing-board [board]
+  [:h2 "Start placing your fleet!"]
+  [:table {:id "fleet"}
+   [:tr
+    [:th {:style "border: 0px"} "&nbsp;&nbsp;"]
+    (for [x (range 1 11)] [:th{:class "header"} x])
+    ]
+   (map-indexed (fn [yCoord row]
+                  (make-row yCoord row true))
+                board)])
 
 (defn make-board
   ([board with-submit?] (make-board board "your" with-submit?))
@@ -91,14 +102,15 @@
   (html
    [:p#game-over [:h2 "Game Over!"] "You won! Or Lost! I don't know actually.. Figure that out yourself!"]))
 
-
 ;; Layout
 (defpartial layout
   [& content]
   (html5
    [:head
     [:title "Clojure Project: Epic Battleship"]
-    (include-css "/css/stylesheet.css")]
+    (include-css "/css/stylesheet.css")
+    (include-js "/js/jquery-2.0.2.min.js")
+    (include-js "/js/custom.js")]
    [:body
     [:div#wrapper [:h1 "Clojure Project: Epic Battleship"]
      content]]))
@@ -106,7 +118,7 @@
 ;; Start screen
 (defn start-screen []
   (layout
-   [:div#board (make-board empty-board true)]
+   [:div#board (make-placing-board empty-board)]
    [:div#right-menu (fleet) (instruction)]
    ))
 

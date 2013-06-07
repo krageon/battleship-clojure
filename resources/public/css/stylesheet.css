@@ -308,6 +308,11 @@ td{
   text-align: center;
 }
 
+/* Placement board */
+table#fleet td input{
+  cursor: pointer;
+}
+
 /* Cell coloring */
 table input[value="x"], table td[value="x"]{
   background-color: rgb(184, 227, 186);
