@@ -17,7 +17,7 @@
                   ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]])
 
 (defn ships [] [{:name "Aircraft Carrier"
-                 :amountx "1"
+                 :amount "1"
                  :size "5"}
                 {:name "Battleship"
                  :amount "1"
@@ -88,14 +88,14 @@
    [:p#fleet [:h2 "Fleet:"] "Place your fleet on the board!"
     [:table {:class "notboard"}
      [:thead
-      [:tr [:th "#"][:th "ship"][:th "size"]]]
+      [:tr [:th "#"][:th "ship"][:th "size"][:th "add"]]]
      (into [:tbody]
            (for [ship (ships)]
-             [:tr [:td (:amount ship) "x"][:td (:name ship)][:td (:size ship)]]
+             [:tr [:td {:id "amount"} (:amount ship) "x"][:td {:id "name"} (:name ship)][:td {:id "size"} (:size ship)][:td {:class "add" :id (:name str(:name ship "Btn")):style "cursor: pointer"} "+"]]
              )
            )
      ]]
-   (form-to [:post "/"](submit-button {:style "width: 83%; cursor: pointer"} "To Battle!!"))
+   (form-to [:post "/"](submit-button {:style "cursor: pointer"} "To Battle!!"))
    ))
 
 (defn game-over[]
