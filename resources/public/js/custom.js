@@ -24,7 +24,7 @@ $(document).ready(function() {
 		}else{
 			alert("You bugged the system, good job, now try again");
 			window.location.reload();
-			history.go(0);
+      return false;
 		}
 	});
 
