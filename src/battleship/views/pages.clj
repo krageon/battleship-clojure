@@ -132,11 +132,11 @@
 ;;Waiting for controller. (TODO: Add controller :as controller)
 
 ;; Play screen
-;(defn play-screen []
-;  (common/layout
-;   [:div#board (make-board (controller/get-board "axis") true)]
-;   [:div#right-menu (make-board (controller/get-board "allies") false) (instruction)]
-;   ))
+(defn play-screen []
+  (common/layout
+   [:div#board (make-board (controller/get-board "axis") true)]
+   [:div#right-menu (make-board (controller/get-board "allies") false) (instruction)]
+   ))
 
 ;; End screen
 ;(defn end-screen []

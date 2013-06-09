@@ -7,12 +7,12 @@
 ; (bs-board-string (:board player-data)) ; player a or b as required, :board and :shot as required
 ; (coord-display-to-backend "A2") ;=> [0 1]
 
-;(def coord-display-to-backend
-;  (let [xcharoffset (int \A)]
-;    (fn [x]
-;      (let [letter (first x),
-;            number ((comp str first rest) x)]
-;        [(- (int letter) xcharoffset) (- (Integer/parseInt number) 1)]))))
+(def coord-display-to-backend
+  (let [xcharoffset (int \A)]
+    (fn [x]
+      (let [letter (first x),
+            number ((comp str first rest) x)]
+        [(- (int letter) xcharoffset) (- (Integer/parseInt number) 1)]))))
 
 ;; Printing the board
 
@@ -53,6 +53,8 @@
       (if (> y maxY)
         result
         (recur maxX y maxY (assoc result (count result) [(bs-board-line board maxX y)]))))))
+
+(bs-board (:board bs-player-a))
 
 ;; Picking ship locations
 (def ships [{:name "Aircraft Carrier"
