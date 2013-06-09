@@ -1,183 +1,279 @@
 $(document).ready(function() {
-	$currentShip = "";
-	var letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-	var index = 0;
+  $currentShip = "";
+  var letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+  var destroyer = 1;
+  var submarine = 1;
 
-	$('form input[value="To Battle!!"]').click(function(){
-		var canSubmit = true;
-		var counter = 0;
-		$('tr td#amount').each(function(){
-			if($(this).text().charAt(0) != 0){
-				canSubmit = false;
-			}
-		});
-		if(canSubmit){
-			$('input[value="o"]').each(function(){
-				counter++;
-			});
-		}else{
-			alert("You haven't placed your whole fleet yet!"); return false;
-		}
-		if(counter === 18){
-			$(this).submit();
-			alert("Going to submit!!");
-		}else{
-			alert("You bugged the system, good job, now try again");
-			window.location.reload();
+  $('form input').click(function(){
+    var canSubmit = true;
+    var counter = 0;
+    $('tr td#amount').each(function(){
+      if($(this).text().charAt(0) != 0){
+        canSubmit = false;
+      }
+    });
+    if(canSubmit){
+      $('input[value="o"]').each(function(){
+        counter++;
+      });
+    }else{
+      alert("You haven't placed your whole fleet yet!"); return false;
+    }
+    if(counter === 18){
+      var aircraftcarrier = getShip("Aircraft Carrier", 0);
+      var battleship = getShip("Battleship", 0);
+      var cruiser = getShip("Cruiser", 0);
+      var destroyer1 = getShip("Destroyer", 1);
+      var destroyer2 = getShip("Destroyer", 2);
+      var submarine1 = getShip("Submarine", 1);
+      var submarine2 = getShip("Submarine", 2);
+
+      alert("Going to submit!!");
+
+      // Yes, this is happening
+      $.ajax({
+        type: 'POST',
+        url: '/ships',
+        data: aircraftcarrier,
+        success: alert('yay succes'),
+        error: alert('NOOES We lost one')
+      });
+      $.ajax({
+        type: 'POST',
+        url: '/ships',
+        data: battleship,
+        success: alert('yay succes'),
+        error: alert('NOOES We lost one')
+      });
+      $.ajax({
+        type: 'POST',
+        url: '/ships',
+        data: cruiser,
+        success: alert('yay succes'),
+        error: alert('NOOES We lost one')
+      });
+      $.ajax({
+        type: 'POST',
+        url: '/ships',
+        data: destroyer1,
+        success: alert('yay succes'),
+        error: alert('NOOES We lost one')
+      });
+      $.ajax({
+        type: 'POST',
+        url: '/ships',
+        data: destroyer2,
+        success: alert('yay succes'),
+        error: alert('NOOES We lost one')
+      });
+      $.ajax({
+        type: 'POST',
+        url: '/ships',
+        data: submarine1,
+        success: alert('yay succes'),
+        error: alert('NOOES We lost one')
+      });
+      $.ajax({
+        type: 'POST',
+        url: '/ships',
+        data: submarine2,
+        success: alert('yay succes'),
+        error: alert('NOOES We lost one')
+      });
       return false;
-		}
-	});
+    }else{
+      alert("You bugged the system, good job, now try again");
+      window.location.reload();
+      history.go(0);
+    }
+  });
 
-	$(".add").click(function(){
-		$row = $(this).closest('tr');
-		$amount = $row.find('#amount').text().charAt(0);
-		if($amount > 0){
-			$row.find('#amount').text($amount-1+"x");
-			$size = $row.find('#size').text();
-			coord = getFirstCoord();
-			for($i = 0; $i < $size; $i++){
-				$currentShip = $('input[name="'+coord+($i+1)+'"]');
-				setAttribute($row.find('#name').text()+letters[index], "o", coord+"1", true, $size);
-			}
-			index++;
-		}else{
-			alert("You've placed the max amount of this ship");
-		}
-	});
+  $(".add").click(function(){
+    $row = $(this).closest('tr');
+    $amount = $row.find('#amount').text().charAt(0);
+    if($amount > 0){
+      $row.find('#amount').text($amount-1+"x");
+      $size = $row.find('#size').text();
+      coord = getFirstCoord();
+      var name = $row.find('#name').text();
+      version = getId(name);
 
-	$("table#fleet td input").click(function(){
-		if($(this).val() === 'o'){
-			var size = $(this).attr('size');
-			if(size > 1){
-				var yCoord= $(this).attr('start').charAt(0);
-				var xCoord= $(this).attr('start').charAt(1);
-				var posArray = $.inArray(yCoord, letters);
-				var name = $(this).attr('ship');
-				var size = $(this).attr('size');
-				var horizontal = $(this).attr('horizontal') == 'true';
-				var canSet = true;
+      for($i = 0; $i < $size; $i++){
+        $currentShip = $('input[name="'+coord+($i+1)+'"]');
+        setAttribute(name, version, "o", coord+"1", true, $size);
+      }
+    }else{
+      alert("You've placed the max amount of this ship");
+    }
+  });
 
-				if(horizontal){
-					if((parseInt(posArray)+parseInt(size)) > letters.length){ alert('Cannot change direction, there is no space!');}
-					else{
-						for(i = 1; i < size+1; i++){
-							if($('input[name="'+letters[(posArray+i)]+xCoord+'"]').val() === "o"){
-								alert('Cannot change direction, there is already a ship in place');
-								canSet = false; break;
-							}
-						}
-						if(canSet){
-							removeShipByName(name);
-							for(i = 0; i < size; i++){
-								$currentShip = $('input[name="'+letters[(parseInt(posArray)+i)]+xCoord+'"]');
-								setAttribute(name, "o", coord+"1", false, $size);
-							}
-						}
-					}
-				}else{
-					if(parseInt(xCoord)+(size-1) > 10){ alert('Cannot change direction, there is no space!');}
-					else{
-						for(i = 1; i < size+1; i++){
-							if($('input[name="'+yCoord+(parseInt(xCoord)+i)+'"]').val() === "o"){
-								alert('Cannot change direction, there is already a ship in place');
-								canSet = false; break;
-							}
-						}
-						if(canSet){
-							removeShipByName(name)
-							for(i = 0; i < size; i++){
-								$currentShip = $('input[name="'+yCoord+(parseInt(xCoord)+i)+'"]');
-								setAttribute(name, "o", yCoord+xCoord, true, $size);
-							}
-						}
-					}
-				}
-			}
-		}else{
-			var name =$currentShip.attr('ship');
-			var size = $currentShip.attr('size');
-			var horizontal = $currentShip.attr('horizontal') == 'true';
-			buttonCoord = $(this).attr('name');
-			var yButton = buttonCoord.charAt(0);
-			if(buttonCoord.length > 2){
-				var xButton = buttonCoord.charAt(1)+buttonCoord.charAt(2);
-			}else{
-				var xButton = buttonCoord.charAt(1);
-			}
-			var posArray = $.inArray(yButton, letters);
+  $("table#fleet td input").click(function(){
+    if($(this).val() === 'o'){
+      var size = $(this).attr('size');
+      if(size > 1){
+        var yCoord= $(this).attr('start').charAt(0);
+        var xCoord= $(this).attr('start').charAt(1);
+        var posArray = $.inArray(yCoord, letters);
+        var name = $(this).attr('ship');
+        var version = $(this).attr('version');
+        var size = $(this).attr('size');
+        var horizontal = $(this).attr('horizontal') == 'true';
+        var canSet = true;
 
-			if(horizontal){
-				if(isLegal(horizontal, size, yButton, xButton)){
-					removeShipByName(name);
-					for(i = 0; i < size; i++){
-						$currentShip = $('input[name="'+yButton+(parseInt(xButton)+i)+'"]');
-						setAttribute(name, "o", yButton+xButton, true, size);
-					}
-				}else{
-					alert('There is not enough room to put the ship here');
-				}
-			}else{
-				if(isLegal(horizontal, size, yButton, xButton)){
-					removeShipByName(name);
-					for(i = 0; i < size; i++){
-						$currentShip = $('input[name="'+(letters[(parseInt(posArray)+i)]+xButton+'"]'));
-						setAttribute(name, "o", yButton+xButton, false, size);
-					}
-				}else{
-					alert('There is not enough room to put the ship here');
-				}
-			}
-		}
-	});
+        if(horizontal){
+          if((parseInt(posArray)+parseInt(size)) > letters.length){ alert('Cannot change direction, there is no space!');}
+          else{
+            for(i = 1; i < size+1; i++){
+              if($('input[name="'+letters[(posArray+i)]+xCoord+'"]').val() === "o"){
+                alert('Cannot change direction, there is already a ship in place');
+                canSet = false; break;return false;
+              }
+            }
+            if(canSet){
+              removeShipByName(name, version);
+              for(i = 0; i < size; i++){
+                $currentShip = $('input[name="'+letters[(parseInt(posArray)+i)]+xCoord+'"]');
+                setAttribute(name, version, "o", coord+"1", false, $size);
+              }
+            }
+          }
+        }else{
+          if(parseInt(xCoord)+(size-1) > 10){ alert('Cannot change direction, there is no space!');}
+          else{
+            for(i = 1; i < size+1; i++){
+              if($('input[name="'+yCoord+(parseInt(xCoord)+i)+'"]').val() === "o"){
+                alert('Cannot change direction, there is already a ship in place');
+                canSet = false; break;return false;
+              }
+            }
+            if(canSet){
+              removeShipByName(name, version)
+              for(i = 0; i < size; i++){
+                $currentShip = $('input[name="'+yCoord+(parseInt(xCoord)+i)+'"]');
+                setAttribute(name, version, "o", yCoord+xCoord, true, $size);
+              }
+            }
+          }
+        }
+      }
+    }else{
+      var name =$currentShip.attr('ship');
+      var version = $currentShip.attr('version');
+      var size = $currentShip.attr('size');
+      var horizontal = $currentShip.attr('horizontal') == 'true';
+      buttonCoord = $(this).attr('name');
+      var yButton = buttonCoord.charAt(0);
+      if(buttonCoord.length > 2){
+        var xButton = buttonCoord.charAt(1)+buttonCoord.charAt(2);
+      }else{
+        var xButton = buttonCoord.charAt(1);
+      }
+      var posArray = $.inArray(yButton, letters);
 
-	function setAttribute(ship, value, startCoordination, horizontal, size){
-		$currentShip.attr('ship', ship);
-		$currentShip.val(value);
-		$currentShip.attr('start', startCoordination);
-		$currentShip.attr('horizontal', horizontal);
-		$currentShip.attr('size', size);
-	}
+      if(horizontal){
+        if(isLegal(horizontal, size, yButton, xButton)){
+          removeShipByName(name, version);
+          for(i = 0; i < size; i++){
+            $currentShip = $('input[name="'+yButton+(parseInt(xButton)+i)+'"]');
+            setAttribute(name, version, "o", yButton+xButton, true, size);
+          }
+        }else{
+          alert('There is not enough room to put the ship here');
+        }
+      }else{
+        if(isLegal(horizontal, size, yButton, xButton)){
+          removeShipByName(name, version);
+          for(i = 0; i < size; i++){
+            $currentShip = $('input[name="'+(letters[(parseInt(posArray)+i)]+xButton+'"]'));
+            setAttribute(name, version, "o", yButton+xButton, false, size);
+          }
+        }else{
+          alert('There is not enough room to put the ship here');
+        }
+      }
+    }
+  });
 
-	function getFirstCoord(){
-		var isEmpty = true;
-		for(a = 0; a < letters.length; a++){
-			for(i = 1; i < 11; i++){
-				if($('input[name="'+letters[a]+(i)+'"]').val() === "o"){
-					isEmpty = false; break;
-				}else{
-					isEmpty = true;
-				}
-			}
-			if(isEmpty){
-				return letters[a];break;
-			}
-		}
-	}
+  function setAttribute(ship, version, value, startCoordination, horizontal, size){
+    $currentShip.attr('ship', ship);
+    $currentShip.attr('version', version);
+    $currentShip.val(value);
+    $currentShip.attr('start', startCoordination);
+    $currentShip.attr('horizontal', horizontal);
+    $currentShip.attr('size', size);
+  }
 
-	function isLegal(horizontal, size, startY, startX){
-		var isLegal = true;
-		var posArray = $.inArray(startY, letters);
+  function getFirstCoord(){
+    var isEmpty = true;
+    for(a = 0; a < letters.length; a++){
+      for(i = 1; i < 11; i++){
+        if($('input[name="'+letters[a]+(i)+'"]').val() === "o"){
+          isEmpty = false; break;
+        }else{
+          isEmpty = true;
+        }
+      }
+      if(isEmpty){
+        return letters[a];break;
+      }
+    }
+  }
 
-		if(horizontal){
-			for(i = 0; i < size; i++){
-				if($('input[name="'+startY+(parseInt(startX)+i)+'"]').val() === "o" || ((parseInt(startX))+(parseInt(size-1))) > 10){
-					isLegal = false; break;
-				}
-			}
-		}else{
-			for(i = 0; i < size; i++){
-				if($('input[name="'+letters[(parseInt(posArray)+i)]+startX+'"]').val() === "o" || ((parseInt(posArray))+(parseInt(size))) > letters.length){
-					isLegal = false; break;
-				}
-			}
-		}
-		return isLegal;
-	}
+  function isLegal(horizontal, size, startY, startX){
+    var isLegal = true;
+    var posArray = $.inArray(startY, letters);
 
-	function removeShipByName(name){
-		$('input[ship="'+name+'"]').each(function(){
-								$currentShip = $(this);
-								setAttribute("", "~", "", false, 0);
-							});
-	}
+    if(horizontal){
+      for(i = 0; i < size; i++){
+        if($('input[name="'+startY+(parseInt(startX)+i)+'"]').val() === "o" || ((parseInt(startX))+(parseInt(size-1))) > 10){
+          isLegal = false; break;
+        }
+      }
+    }else{
+      for(i = 0; i < size; i++){
+        if($('input[name="'+letters[(parseInt(posArray)+i)]+startX+'"]').val() === "o" || ((parseInt(posArray))+(parseInt(size))) > letters.length){
+          isLegal = false; break;
+        }
+      }
+    }
+    return isLegal;
+  }
+
+  function getShip(name, version){
+    var xy ="";
+    var horizontal = true;
+
+    if(version === 0){
+      xy = $('input[ship="'+name+'"]').attr("start");
+      horizontal = $('input[ship="'+name+'"]').attr("horizontal") === "true";
+    }else{
+      $('input[ship="'+name+'"]').each(function(){
+        if(parseInt($(this).attr('version'))===version){
+          xy = $(this).attr('start');
+          horizontal = $(this).attr('horizontal') === 'true';
+        }
+      });
+    }
+    return {name: name, xy: xy, horizontal: horizontal};
+  }
+
+  function removeShipByName(name, version){
+    $('input[ship="'+name+'"]').each(function(){
+      if($(this).attr('version') === version){
+        $currentShip = $(this);
+        setAttribute("","", "~", "", false, 0);
+      }
+    });
+  }
+
+  function getId(name){
+    var id = 0;
+    if(name === 'Destroyer'){
+      id = destroyer; destroyer++;
+    }
+    if(name === "Submarine"){
+      id = submarine; submarine++;
+    }
+    return id;
+  }
 });
