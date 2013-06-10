@@ -44,9 +44,9 @@ $(document).ready(function() {
       $.post("/ships", submarine1);
       $.post("/ships", submarine2);
 
-      return false;
+      return true;
     }else{
-      alert("You bugged the system, good job, now try again");
+      console.log("You bugged the system, good job, now try again");
       window.location.reload();
       history.go(0);
     }
@@ -218,7 +218,9 @@ $(document).ready(function() {
         }
       });
     }
-    return {name: name, xy: xy, horizontal: horizontal};
+    var ship = {name: name, xy: xy, horizontal: horizontal};
+    console.log(ship);
+    return ship;
   }
 
   function removeShipByName(name, version){
