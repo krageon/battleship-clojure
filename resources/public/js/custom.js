@@ -97,7 +97,7 @@ $(document).ready(function() {
               removeShipByName(name, version);
               for(i = 0; i < size; i++){
                 $currentShip = $('input[name="'+letters[(parseInt(posArray)+i)]+xCoord+'"]');
-                setAttribute(name, version, "o", coord+"1", false, $size);
+                setAttribute(name, version, "o", coord+"1", false, size);
               }
             }
           }
@@ -114,7 +114,7 @@ $(document).ready(function() {
               removeShipByName(name, version)
               for(i = 0; i < size; i++){
                 $currentShip = $('input[name="'+yCoord+(parseInt(xCoord)+i)+'"]');
-                setAttribute(name, version, "o", yCoord+xCoord, true, $size);
+                setAttribute(name, version, "o", yCoord+xCoord, true, size);
               }
             }
           }
