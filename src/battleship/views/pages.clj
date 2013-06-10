@@ -66,7 +66,7 @@
              )
            )
      ]]
-   (form-to [:post "/"](submit-button {:style "cursor: pointer"} "To Battle!!"))
+    [:form {:id "fleeter"} [:input {:type "submit" :style "cursor: pointer" :id "fleetsend" :value "To Battle!!"} ]]
    ))
 
 (defn game-over[]

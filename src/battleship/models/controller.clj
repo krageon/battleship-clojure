@@ -68,6 +68,7 @@
 
 (defpage [:get "/"] {} (start-page))
 (defpage [:post "/ships"] {:keys [name xy horizontal]} (put-ship name xy horizontal))
+(defpage [:get "/play"] {} (view/play-screen (get-board "axis")(get-board "allies")))
 (defpage [:post "/"] {:keys [xy]}
   (if (nil? xy)
     (view/play-screen (get-board "axis") (get-board "allies"))

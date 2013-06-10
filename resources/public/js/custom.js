@@ -4,7 +4,7 @@ $(document).ready(function() {
   var destroyer = 1;
   var submarine = 1;
 
-  $('form input').click(function(){
+  $('#fleeter').submit(function(){
     var canSubmit = true;
     var counter = 0;
     $('tr td#amount').each(function(){
@@ -36,20 +36,41 @@ $(document).ready(function() {
       console.log(submarine1); console.log(submarine2);
       */
 
-      $.post("/ships", aircraftcarrier);
-      $.post("/ships", battleship);
-      $.post("/ships", cruiser);
-      $.post("/ships", destroyer1);
-      $.post("/ships", destroyer2);
-      $.post("/ships", submarine1);
-      $.post("/ships", submarine2);
-
-      return true;
+      $.post("/ships", aircraftcarrier, function(data, success){
+        if(success){
+          $.post("/ships", battleship, function(data, success){
+            if(success){
+              $.post("/ships", cruiser, function(data,success){
+                if(success){
+                  $.post("/ships", destroyer1, function(data, success){
+                    if(success){
+                      $.post("/ships", destroyer2, function(data, success){
+                        if(success){
+                          $.post("/ships", submarine1, function(data, success){
+                            if(success){
+                              $.post("/ships", submarine2, function(data, success){
+                                if(success){
+                                  window.location.assign('/play');
+                                }
+                              });
+                            }
+                          });
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
     }else{
       console.log("You bugged the system, good job, now try again");
       window.location.reload();
       history.go(0);
     }
+    return false;
   });
 
   $(".add").click(function(){
@@ -219,7 +240,6 @@ $(document).ready(function() {
       });
     }
     var ship = {name: name, xy: xy, horizontal: horizontal};
-    console.log(ship);
     return ship;
   }
 
