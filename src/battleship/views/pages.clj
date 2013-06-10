@@ -4,34 +4,6 @@
   (:use [hiccup.page :only [include-css include-js html5]])
   (:use [noir.core :only [defpartial]]))
 
-(def empty-board [["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
-                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
-                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
-                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
-                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
-                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
-                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
-                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
-                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
-                  ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]])
-
-(defn ships [] [{:name "Aircraft Carrier"
-                 :amount "1"
-                 :size "5"},
-                {:name "Battleship"
-                 :amount "1"
-                 :size "4"},
-                {:name "Cruiser"
-                 :amount "1"
-                 :size "3"},
-                {:name "Destroyer"
-                 :amount "2"
-                 :size "2"},
-                {:name "Submarine"
-                 :amount "2"
-                 :size "1"}
-                ])
-
 (defn make-cell [yCoord xCoord value with-submit?]
   (if with-submit?
     [:td [:input {:name (str (char (+ 65 yCoord)) xCoord) :type "submit" :value value :title (str (char (+ 65 yCoord)) xCoord)}]]
@@ -82,7 +54,7 @@
      ]]
    ))
 
-(defn fleet[]
+(defn fleet[ships]
   (html
    [:p#fleet [:h2 "Fleet:"] "Place your fleet on the board!"
     [:table {:class "notboard"}
@@ -115,17 +87,10 @@
      content]]))
 
 ;; Start screen
-(defn start-screen [allies]
+(defn start-screen [allies ships]
   (layout
    [:div#board (make-placing-board allies)]
-   [:div#right-menu (fleet) (instruction)]
-   ))
-
-;; test screen
-(defn test-screen []
-  (layout
-   [:div#board (make-board empty-board "axis" true)]
-   [:div#right-menu (make-board empty-board "allies" false) (form-to [:get "/"](submit-button {:style "width: 63%; cursor: pointer;" :title "Restart the game"} "Retreat!!")) (instruction)]
+   [:div#right-menu (fleet(ships)) (instruction)]
    ))
 
 ;; Play screen

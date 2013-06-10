@@ -41,7 +41,7 @@
 (defn start-page []
   (do
     (reset-game!)
-    (view/start-screen (get-board "allies"))))
+    (view/start-screen ((get-board "allies") model/ships))))
 
 (defn ai-move []
   (do
