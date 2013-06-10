@@ -6,12 +6,13 @@
     (fn [x]
       (let [letter (first x),
             number ((comp first rest) x)]
-        [(- (int letter) xcharoffset) (-
-                                       (if (or (= (type number) java.lang.Long)
-                                               (= (type number) java.lang.Integer))
-                                         number
-                                         (Integer/parseInt (str number)))
-                                       1)]))))
+        [(-
+          (if (or (= (type number) java.lang.Long)
+                  (= (type number) java.lang.Integer))
+            number
+            (Integer/parseInt (str number)))
+          1)
+         (- (int letter) xcharoffset)]))))
 
 ;; Printing the board
 
@@ -79,9 +80,11 @@
 ;(bs-ship-get-all "taco") ;=> ()
 
 (defn bs-ship-coordinate-offset [orientation coordinates offset]
-  (if (= "horizontal" orientation)
-    [(+ (get coordinates 0) offset) (get coordinates 1)]
-    [(get coordinates 0) (+ (get coordinates 1) offset)]))
+  (do
+    (println (type coordinates 0) (type coordinates 1))
+    (if orientation
+      [(+ (get coordinates 0) offset) (get coordinates 1)]
+      [(get coordinates 0) (+ (get coordinates 1) offset)])))
 
 (defn bs-ship-is-available [player ship]
   (or
@@ -140,9 +143,15 @@
                 shot))))
 
 
+; TODO: unstub this
 (defn have-won? [player other]
   false)
 
 ;; Randomised ship setup
+; TODO: Make this work
+(defn ai-setup [me]
+  me)
+
+; TODO: make this work
 (defn ai-move [me them]
   me)

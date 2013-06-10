@@ -35,7 +35,7 @@
 
 (defn reset-game! []
   (do
-    (save-key :axis (blank-player)) ; TODO: Initialize AI ships
+    (save-key :axis (model/ai-setup blank-player))
     (save-key :allies (blank-player))))
 
 (defn start-page []
