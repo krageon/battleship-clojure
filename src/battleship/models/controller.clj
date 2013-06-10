@@ -28,10 +28,10 @@
     (model/bs-board (:board (load-key :axis)))))
 
 (defn put-ship [ship xy horizontal] ; (fn [player ship orientation coordinates]
-  (save-key :allies
-            (do
-              (println ship xy horizontal)
-              (model/bs-ship-put (load-key :allies) ship (model/coord-display-to-backend xy) horizontal))))
+  (let [coord-fixed (model/coord-display-to-backend xy)]
+    (do
+      (println (load-key :allies) ship coord-fixed horizontal)
+      (save-key :allies (model/bs-ship-put (load-key :allies) ship coord-fixed horizontal)))))
 
 (defn reset-game! []
   (do
@@ -52,8 +52,8 @@
 
 (defn shoot [coordinates] ; "A6"
   (do
-    (cookies/put! :allies (model/bs-shoot (model/coord-display-to-backend coordinates) (cookies/get :allies) (cookies/get :axis)))
-    (if (model/have-won? (cookies/get :allies) (cookies/get :axis))
+    (save-key :allies (model/bs-shoot (model/coord-display-to-backend coordinates) (load-key :allies) (load-key :axis)))
+    (if (model/have-won? (load-key :allies) (load-key :axis))
       (view/end-screen)
       (ai-move))))
 
