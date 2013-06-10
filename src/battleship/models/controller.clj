@@ -27,8 +27,6 @@
     (model/bs-board (:board (load-key :allies)))
     (model/bs-board (:board (load-key :axis)))))
 
-(model/bs-board (:board blank-player))
-
 (defn put-ship [ship xy horizontal] ; (fn [player ship orientation coordinates]
   (save-key :allies (model/bs-ship-put (load-key :allies) ship (model/coord-display-to-backend xy) horizontal)))
 
@@ -40,7 +38,7 @@
 (defn start-page []
   (do
     (reset-game!)
-    (view/start-screen ((get-board "allies") model/ships))))
+    (view/start-screen (get-board "allies") model/ships)))
 
 (defn ai-move []
   (do
@@ -56,6 +54,6 @@
       (view/end-screen)
       (ai-move))))
 
-(defpage [:get "/"] [] (start-page))
+(defpage [:get "/"] {} (start-page))
 (defpage [:post "/"] {:keys [xy]} (shoot xy))
 (defpage [:post "/ships"] {:keys [ship xy horizontal]} (put-ship ship xy horizontal))
