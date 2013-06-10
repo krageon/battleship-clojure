@@ -50,14 +50,18 @@
 
 (defn ai-shoot []
   (do
-    (save-key :axis (model/ai-shoot (load-key :axis) (load-key :allies)))
+    (let [result (model/ai-shoot (load-key :axis) (load-key :allies))]
+      (save-key :allies (result 1))
+      (save-key :axis (result 0)))
     (if (model/have-won? (load-key :axis) (load-key :allies))
       (view/end-screen (get-board "axis") (get-board "allies"))
       (view/play-screen (get-board "axis") (get-board "allies")))))
 
 (defn shoot [coordinates] ; "A6"
   (do
-    (save-key :allies (model/bs-shoot (model/coord-display-to-backend coordinates) (load-key :allies) (load-key :axis)))
+    (let [result (model/bs-shoot (model/coord-display-to-backend coordinates) (load-key :allies) (load-key :axis))]
+      (save-key :allies (result 0))
+      (save-key :axis (result 1)))
     (if (model/have-won? (load-key :allies) (load-key :axis))
       (view/end-screen)
       (ai-shoot))))

@@ -35,7 +35,7 @@
     (loop [x 0
            result []]
       (if (< x maxX)
-          (recur (inc x) (assoc result (count result) (bs-cell-get board [x y])))
+        (recur (inc x) (assoc result (count result) (bs-cell-get board [x y])))
         result))))
 
 ; converting a board (a sparse array-thing) to a string, filling in the gaps
@@ -137,19 +137,39 @@
 ;; Making a move
 (def bs-shoot
   (fn [coordinates player opponent]
-    (assoc-in player [:shot coordinates]
-              (if (= boat (bs-cell-get (:board opponent)))
-                hit
-                shot))))
+    [(assoc-in player [:shot coordinates]
+               (if (= boat (bs-cell-get (:board opponent)))
+                 hit
+                 shot))
+     (assoc-in opponent [:board coordinates]
+               (if (= boat (bs-cell-get (:board opponent)))
+                 hit
+                 shot))]))
 
 (defn have-won? [player other]
-  (every? (fn [x] (every? #(not= "o" %) x)) (bs-board other))
+  (every? (fn [x] (every? #(not= "o" %) x)) (bs-board other)))
 
 ;; Randomised ship setup
-; TODO: Make this work
+; very fucking expensive, but *so* random :D
 (defn ai-setup [me]
-  me)
+  (loop [current 0
+         player me]
+    (if (< current (count ships))
+      (let [ship (get ships current)
+            coordinates [(rand-int 10) (rand-int 10)]
+            orientation (= 0 (rand-int 1))
+            player-proposed (bs-ship-put player (:name ship) orientation coordinates)]
+        (if (not= player player-proposed)
+          (recur (inc current) player-proposed)
+          (recur current player)))
+      player)))
 
-; TODO: make this work
+;  CPU has a 5% hit chance ATM - this is a stupid fkn shot algorithm.
+; TODO: Refactor into a diagonal hitscan with subsequent gap-fill to find the submarines - this simulates a moderately skilled player
+;         and isn't cheaty like this
 (defn ai-shoot [me them]
-  me)
+  (if (> 5 (rand-int 100))
+    (let [board (:board them)
+          hit ((first (filter #(= "o" (% 1)) (seq board))) 0)]
+      (bs-shoot hit me them))
+    [me them]))
