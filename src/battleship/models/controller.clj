@@ -48,9 +48,9 @@
     (reset-game!)
     (view/start-screen (get-board "allies") model/ships)))
 
-(defn ai-move []
+(defn ai-shoot []
   (do
-    (save-key :axis (model/ai-move (load-key :axis) (load-key :allies)))
+    (save-key :axis (model/ai-shoot (load-key :axis) (load-key :allies)))
     (if (model/have-won? (load-key :axis) (load-key :allies))
       (view/end-screen (get-board "axis") (get-board "allies"))
       (view/play-screen (get-board "axis") (get-board "allies")))))
@@ -60,7 +60,7 @@
     (save-key :allies (model/bs-shoot (model/coord-display-to-backend coordinates) (load-key :allies) (load-key :axis)))
     (if (model/have-won? (load-key :allies) (load-key :axis))
       (view/end-screen)
-      (ai-move))))
+      (ai-shoot))))
 
 (defpage [:get "/"] {} (start-page))
 (defpage [:post "/ships"] {:keys [name xy horizontal]} (put-ship name xy horizontal))

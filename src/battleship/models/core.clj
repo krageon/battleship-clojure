@@ -142,8 +142,6 @@
                 hit
                 shot))))
 
-
-; TODO: unstub this
 (defn have-won? [player other]
   (every? (fn [x] (every? #(not= "o" %) x)) (bs-board player))
 
@@ -153,5 +151,5 @@
   me)
 
 ; TODO: make this work
-(defn ai-move [me them]
+(defn ai-shoot [me them]
   me)
