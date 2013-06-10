@@ -1,7 +1,7 @@
 (ns battleship.models.controller
   (:use compojure.core)
   (:use [noir.core :only [defpage]])
-  (:use '[clojure.string :only [join split]])
+  (:use [clojure.string :only [join split]])
   (:require  [noir.cookies :as cookies]
              [compojure.core :as compojure]
              [battleship.views.pages :as view]
