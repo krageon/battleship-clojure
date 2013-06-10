@@ -30,56 +30,15 @@ $(document).ready(function() {
 
       alert("Going to submit!!");
 
-      // Yes, this is happening
-      $.ajax({
-        type: 'POST',
-        url: '/ships',
-        data: aircraftcarrier,
-        success: alert('yay succes'),
-        error: alert('NOOES We lost one')
-      });
-      $.ajax({
-        type: 'POST',
-        url: '/ships',
-        data: battleship,
-        success: alert('yay succes'),
-        error: alert('NOOES We lost one')
-      });
-      $.ajax({
-        type: 'POST',
-        url: '/ships',
-        data: cruiser,
-        success: alert('yay succes'),
-        error: alert('NOOES We lost one')
-      });
-      $.ajax({
-        type: 'POST',
-        url: '/ships',
-        data: destroyer1,
-        success: alert('yay succes'),
-        error: alert('NOOES We lost one')
-      });
-      $.ajax({
-        type: 'POST',
-        url: '/ships',
-        data: destroyer2,
-        success: alert('yay succes'),
-        error: alert('NOOES We lost one')
-      });
-      $.ajax({
-        type: 'POST',
-        url: '/ships',
-        data: submarine1,
-        success: alert('yay succes'),
-        error: alert('NOOES We lost one')
-      });
-      $.ajax({
-        type: 'POST',
-        url: '/ships',
-        data: submarine2,
-        success: alert('yay succes'),
-        error: alert('NOOES We lost one')
-      });
+      $.post("/ships", aircraftcarrier);
+      $.post("/ships", battleship);
+      $.post("/ships", cruiser);
+      $.post("/ships", destroyer1);
+      $.post("/ships", destroyer2);
+      $.post("/ships", submarine1);
+      $.post("/ships", submarine2);
+
+
       return false;
     }else{
       alert("You bugged the system, good job, now try again");
