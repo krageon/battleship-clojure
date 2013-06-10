@@ -28,7 +28,13 @@ $(document).ready(function() {
       var submarine1 = getShip("Submarine", 1);
       var submarine2 = getShip("Submarine", 2);
 
-      alert("Going to submit!!");
+      /* Check for objects
+      console.log(aircraftcarrier);
+      console.log(battleship);
+      console.log(cruiser);
+      console.log(destroyer1); console.log(destroyer2);
+      console.log(submarine1); console.log(submarine2);
+      */
 
       $.post("/ships", aircraftcarrier);
       $.post("/ships", battleship);
@@ -37,7 +43,6 @@ $(document).ready(function() {
       $.post("/ships", destroyer2);
       $.post("/ships", submarine1);
       $.post("/ships", submarine2);
-
 
       return false;
     }else{
