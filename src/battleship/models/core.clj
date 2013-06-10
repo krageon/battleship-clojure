@@ -147,6 +147,8 @@
   (every? (fn [x] (every? #(not= "o" %) x)) (bs-board other)))
 
 ;; Randomised ship setup
+(def test-player {:board {} :shot {} :ships []})
+
 ; very fucking expensive, but *so* random :D
 (defn ai-setup [me]
   (loop [current 0
@@ -155,13 +157,12 @@
       (let [ship (get ships current)
             coordinates [(rand-int 10) (rand-int 10)]
             orientation (= 0 (rand-int 1))
+            can-place (bs-ship-is-available player ship)
             player-proposed (bs-ship-put player (:name ship) orientation coordinates)]
-        (if (not= player player-proposed)
-          (recur (inc current) player-proposed)
-          (recur current player)))
+          (if (not= player player-proposed)
+            (recur current player-proposed)
+            (recur (inc current) player)))
       player)))
-
-(def test-player {:board {} :shot {} :ships []})
 
 ;  CPU has a 5% hit chance ATM - this is a stupid fkn shot algorithm.
 ; TODO: Refactor into a diagonal hitscan with subsequent gap-fill to find the submarines - this simulates a moderately skilled player

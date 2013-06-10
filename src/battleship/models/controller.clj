@@ -26,16 +26,21 @@
                        :shot {}
                        :ships []})
 
-(defn get-board [player]
-  (let [board (if (= player "allies")
-                (model/bs-board (:board (load-key :allies)))
-                (model/bs-board (:board (load-key :axis))))]
-    board)
+(defn get-player [player]
+  (let [result (if (= player "allies")
+                 (load-key :allies)
+                 (load-key :axis))]
+    result)
   )
+
+(defn get-board [player]
+  (model/bs-board (:board (get-player player))))
+
+(defn get-shot [player]
+  (model/bs-board (:shot (get-player player))))
 
 (defn put-ship [ship xy horizontal] ; (fn [player ship orientation coordinates]
   (let [coord-fixed (model/coord-display-to-backend xy)]
-    (println "asd" ship coord-fixed)
     (save-key :allies (model/bs-ship-put (load-key :allies) ship horizontal coord-fixed))))
 
 (defn reset-game! []
@@ -50,15 +55,17 @@
 
 (defn ai-shoot []
   (do
+    (println "ai-shoot")
     (let [result (model/ai-shoot (load-key :axis) (load-key :allies))]
       (save-key :allies (result 1))
       (save-key :axis (result 0)))
     (if (model/have-won? (load-key :axis) (load-key :allies))
       (view/end-screen (get-board "axis") (get-board "allies"))
-      (view/play-screen (get-board "axis") (get-board "allies")))))
+      (view/play-screen (get-shot "allies") (get-board "allies")))))
 
 (defn shoot [coordinates] ; "A6"
   (do
+    (println "shoot")
     (let [result (model/bs-shoot (model/coord-display-to-backend coordinates) (load-key :allies) (load-key :axis))]
       (save-key :allies (result 0))
       (save-key :axis (result 1)))
@@ -68,8 +75,8 @@
 
 (defpage [:get "/"] {} (start-page))
 (defpage [:post "/ships"] {:keys [name xy horizontal]} (put-ship name xy horizontal))
-(defpage [:get "/play"] {} (view/play-screen (get-board "axis")(get-board "allies")))
+(defpage [:get "/play"] {} (view/play-screen (get-shot "allies") (get-board "allies")))
 (defpage [:post "/"] {:keys [xy]}
   (if (nil? xy)
-    (view/play-screen (get-board "axis") (get-board "allies"))
+    (view/play-screen (get-shot "allies") (get-board "allies"))
     (shoot xy)))
