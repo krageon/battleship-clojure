@@ -4,6 +4,16 @@ $(document).ready(function() {
   var destroyer = 1;
   var submarine = 1;
 
+  $('form#shotboard input').click(function(e){
+    var button = {xy: $(this).attr('name')};
+    $.post("/shoot", button,function(data, success){
+      if(success){
+        window.location.assign("/shoot");
+      };
+    });
+    return false;
+  })
+
   $('#fleeter').submit(function(){
     var canSubmit = true;
     var counter = 0;

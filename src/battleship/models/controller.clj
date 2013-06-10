@@ -70,13 +70,14 @@
       (save-key :allies (result 0))
       (save-key :axis (result 1)))
     (if (model/have-won? (load-key :allies) (load-key :axis))
-      (view/end-screen)
+      (view/end-screen (get-board "axis") (get-board "allies"))
       (ai-shoot))))
 
 (defpage [:get "/"] {} (start-page))
 (defpage [:post "/ships"] {:keys [name xy horizontal]} (put-ship name xy horizontal))
 (defpage [:get "/play"] {} (view/play-screen (get-shot "allies") (get-board "allies")))
-(defpage [:post "/"] {:keys [xy]}
+(defpage [:get "/shoot"] {} (view/play-screen (get-shot "allies") (get-board "allies")))
+(defpage [:post "/shoot"] {:keys [xy]}
   (if (nil? xy)
-    (view/play-screen (get-shot "allies") (get-board "allies"))
+    (do (println "is leeg") (view/play-screen (get-shot "allies") (get-board "allies")))
     (shoot xy)))

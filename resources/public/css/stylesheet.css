@@ -287,7 +287,7 @@ img {
   float: left;
 }
 
-div#wrapper table#axis input[value="~"]:hover, div#wrapper table#your input:hover{
+div#wrapper table#axis input[value="~"]:hover, div#wrapper table#your input:hover, div#wrapper table#shot input[value="~"]:hover{
 	cursor:pointer;
 }
 

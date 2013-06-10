@@ -29,7 +29,7 @@
 (defn make-board
   ([board with-submit?] (make-board board "your" with-submit?))
   ([board id with-submit?]
-   (form-to [:post "/"]
+   (form-to {:id "shotboard"}[:post "/"]
             [:h2 "This is " (if (= id "axis") "the ")(if (= id "allies") "the ") id " board"]
             [:table {:id id}
              [:tr
@@ -96,13 +96,13 @@
 ;; Play screen
 (defn play-screen [axis allies]
   (layout
-   [:div#board (make-board axis true)]
+   [:div#board (make-board axis "shot" true)]
    [:div#right-menu (make-board allies false) (instruction)]
    ))
 
 ; End screen
 (defn end-screen [axis allies]
   (layout
-   [:div#board (make-board axis true)]
+   [:div#board (make-board axis "axis" false)]
    [:div#right-menu (make-board allies false) (game-over)]
    ))
