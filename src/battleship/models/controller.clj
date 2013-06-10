@@ -29,8 +29,9 @@
     ))
 
 (defn start-page []
-  (reset-game!)
-  (view/start-screen (get-board "axis")))
+  (do
+    (reset-game!)
+    (view/start-screen (get-board "allies"))))
 
 (defn ai-move []
   (do
