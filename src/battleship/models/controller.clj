@@ -1,11 +1,16 @@
 (ns battleship.models.controller
   (:use compojure.core)
   (:use [noir.core :only [defpage]])
+  (:use '[clojure.string :only [join split]])
   (:require  [noir.cookies :as cookies]
              [compojure.core :as compojure]
              [battleship.views.pages :as view]
              [compojure.route :as route]
              [battleship.models.core :as model]))
+
+; persistence layer notes
+; keyword = key to string
+; name = string to key
 
 ; Een functie die een schot registreert, checkt of iemand gewonnen heeft en anders
 ; de computer een zet laat doen
@@ -14,19 +19,24 @@
                        :shot {}
                        :ships []})
 
+(defn save-key [k v]
+  (cookies/put! k (str v)))
+
+(defn load-key [k]
+  (read-string (cookies/get k)))
+
 (defn get-board [player]
   (if (= player "allies")
-    (model/bs-board (:board (cookies/get :allies)))
-    (model/bs-board (:board (cookies/get :axis)))))
+    (model/bs-board (:board (load-key :allies)))
+    (model/bs-board (:board (load-key :axis)))))
 
 (defn put-ship [ship xy horizontal] ; (fn [player ship orientation coordinates]
-  (cookies/put! :allies (model/bs-ship-put (cookies/get :allies) ship (model/coord-display-to-backend xy) horizontal)))
+  (save-key :allies (model/bs-ship-put (load-key :allies) ship (model/coord-display-to-backend xy) horizontal)))
 
 (defn reset-game! []
   (do
-    (cookies/put! :axis (blank-player)) ; TODO: Initialize AI ships
-    (cookies/put! :allies (blank-player))
-    ))
+    (save-key :axis (blank-player)) ; TODO: Initialize AI ships
+    (save-key :allies (blank-player))))
 
 (defn start-page []
   (do
@@ -35,8 +45,8 @@
 
 (defn ai-move []
   (do
-    (cookies/put! :axis (model/ai-move (cookies/get :axis) (cookies/get :allies)))
-    (if (model/have-won? (cookies/get :axis) (cookies/get :allies))
+    (save-key :axis (model/ai-move (load-key :axis) (load-key :allies)))
+    (if (model/have-won? (load-key :axis) (load-key :allies))
       (view/end-screen (get-board "axis") (get-board "allies"))
       (view/play-screen (get-board "axis") (get-board "allies")))))
 
