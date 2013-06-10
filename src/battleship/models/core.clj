@@ -143,7 +143,7 @@
                 shot))))
 
 (defn have-won? [player other]
-  (every? (fn [x] (every? #(not= "o" %) x)) (bs-board player))
+  (every? (fn [x] (every? #(not= "o" %) x)) (bs-board other))
 
 ;; Randomised ship setup
 ; TODO: Make this work
