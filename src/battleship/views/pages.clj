@@ -54,14 +54,14 @@
      ]]
    ))
 
-(defn fleet[ships]
+(defn fleet [ships]
   (html
    [:p#fleet [:h2 "Fleet:"] "Place your fleet on the board!"
     [:table {:class "notboard"}
      [:thead
       [:tr [:th "#"][:th "ship"][:th "size"][:th "add"]]]
      (into [:tbody]
-           (for [ship (ships)]
+           (for [ship ships]
              [:tr [:td {:id "amount"} (:amount ship) "x"][:td {:id "name"} (:name ship)][:td {:id "size"} (:size ship)][:td {:class "add" :id (:name str(:name ship "Btn")):style "cursor: pointer"} "+"]]
              )
            )
@@ -90,7 +90,7 @@
 (defn start-screen [allies ships]
   (layout
    [:div#board (make-placing-board allies)]
-   [:div#right-menu (fleet(ships)) (instruction)]
+   [:div#right-menu (fleet ships) (instruction)]
    ))
 
 ;; Play screen

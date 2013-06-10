@@ -28,13 +28,9 @@
   (fn [board maxX y]
     (loop [x 0
            result []]
-      (if (<= maxX x)
-        (do
-          (println x result)
-          (recur (inc x) (assoc result (count result) (bs-cell-get board [x y]))))
+      (if (<= x maxX)
+          (recur (inc x) (assoc result (count result) (bs-cell-get board [x y])))
         result))))
-
-(bs-board-line {} 10 0)
 
 ; converting a board (a sparse array-thing) to a string, filling in the gaps
 (def bs-board
@@ -46,8 +42,6 @@
       (if (> y maxY)
         result
         (recur maxX (inc y) maxY (assoc result (count result) (bs-board-line board maxX y)))))))
-
-(bs-board {})
 
 ;; Picking ship locations
 (def ships [{:name "Aircraft Carrier"
