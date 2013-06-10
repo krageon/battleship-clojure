@@ -80,11 +80,9 @@
 ;(bs-ship-get-all "taco") ;=> ()
 
 (defn bs-ship-coordinate-offset [orientation coordinates offset]
-  (do
-    (println (type coordinates 0) (type coordinates 1))
     (if orientation
       [(+ (get coordinates 0) offset) (get coordinates 1)]
-      [(get coordinates 0) (+ (get coordinates 1) offset)])))
+      [(get coordinates 0) (+ (get coordinates 1) offset)]))
 
 (defn bs-ship-is-available [player ship]
   (or

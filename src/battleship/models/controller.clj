@@ -6,36 +6,41 @@
              [compojure.core :as compojure]
              [battleship.views.pages :as view]
              [compojure.route :as route]
-             [battleship.models.core :as model]))
+             [battleship.models.core :as model]
+             [noir.session :as session]))
 
 ; persistence
 (defn save-key [k v]
+  (println "save" k v)
   (cookies/put! k (str v)))
 
 (defn load-key [k]
+  (println "load" k)
   (read-string (cookies/get k)))
 
-; Een functie die een schot registreert, checkt of iemand gewonnen heeft en anders
-; de computer een zet laat doen
-; input: (defn shoot [coordinates]) ;;=> "A6"
+(defn log [x]
+  (println x)
+  x)
+
 (defn blank-player [] {:board {},
                        :shot {}
                        :ships []})
 
 (defn get-board [player]
-  (if (= player "allies")
-    (model/bs-board (:board (load-key :allies)))
-    (model/bs-board (:board (load-key :axis)))))
+  (let [board (if (= player "allies")
+                (model/bs-board (:board (load-key :allies)))
+                (model/bs-board (:board (load-key :axis))))]
+    board)
+  )
 
 (defn put-ship [ship xy horizontal] ; (fn [player ship orientation coordinates]
   (let [coord-fixed (model/coord-display-to-backend xy)]
-    (do
-      (println (load-key :allies) ship coord-fixed horizontal)
-      (save-key :allies (model/bs-ship-put (load-key :allies) ship coord-fixed horizontal)))))
+    (println "asd" ship coord-fixed)
+    (save-key :allies (model/bs-ship-put (load-key :allies) ship horizontal coord-fixed))))
 
 (defn reset-game! []
   (do
-    (save-key :axis (model/ai-setup blank-player))
+    (save-key :axis (model/ai-setup (blank-player)))
     (save-key :allies (blank-player))))
 
 (defn start-page []
@@ -58,7 +63,8 @@
       (ai-move))))
 
 (defpage [:get "/"] {} (start-page))
-;(view/play-screen (get-board "axis") (get-board "allies"))
-(defpage [:post "/"] {:keys [xy]}
-    (shoot xy))
 (defpage [:post "/ships"] {:keys [name xy horizontal]} (put-ship name xy horizontal))
+(defpage [:post "/"] {:keys [xy]}
+  (if (nil? xy)
+    (view/play-screen (get-board "axis") (get-board "allies"))
+    (shoot xy)))
