@@ -8,9 +8,12 @@
              [compojure.route :as route]
              [battleship.models.core :as model]))
 
-; persistence layer notes
-; keyword = key to string
-; name = string to key
+; persistence
+(defn save-key [k v]
+  (cookies/put! k (str v)))
+
+(defn load-key [k]
+  (read-string (cookies/get k)))
 
 ; Een functie die een schot registreert, checkt of iemand gewonnen heeft en anders
 ; de computer een zet laat doen
@@ -19,16 +22,12 @@
                        :shot {}
                        :ships []})
 
-(defn save-key [k v]
-  (cookies/put! k (str v)))
-
-(defn load-key [k]
-  (read-string (cookies/get k)))
-
 (defn get-board [player]
   (if (= player "allies")
     (model/bs-board (:board (load-key :allies)))
     (model/bs-board (:board (load-key :axis)))))
+
+(model/bs-board (:board blank-player))
 
 (defn put-ship [ship xy horizontal] ; (fn [player ship orientation coordinates]
   (save-key :allies (model/bs-ship-put (load-key :allies) ship (model/coord-display-to-backend xy) horizontal)))

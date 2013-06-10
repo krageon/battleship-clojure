@@ -41,7 +41,7 @@
            result []]
       (if (> y maxY)
         result
-        (recur maxX y maxY (assoc result (count result) [(bs-board-line board maxX y)]))))))
+        (recur maxX (inc y) maxY (assoc result (count result) [(bs-board-line board maxX y)]))))))
 
 ;; Picking ship locations
 (def ships [{:name "Aircraft Carrier"
