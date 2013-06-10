@@ -283,6 +283,7 @@ img {
 
 #wrapper #right-menu{
   width: 325 px;
+  max-width: 412px;
   float: left;
 }
 
