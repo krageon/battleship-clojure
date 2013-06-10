@@ -1,11 +1,5 @@
 ;; Battleship in clojure core
-
 (ns battleship.models.core)
-
-;; use these as an interface:
-; bs-ship-put: (fn [player ship orientation coordinates]) ; coordinates are top or left, respectively
-; (bs-board-string (:board player-data)) ; player a or b as required, :board and :shot as required
-; (coord-display-to-backend "A2") ;=> [0 1]
 
 (def coord-display-to-backend
   (let [xcharoffset (int \A)]
@@ -22,11 +16,6 @@
 (def hit "x")
 (def shot "/")
 (def new-line "\n")
-
-; Move this to the noir session stuff
-(def bs-player-a {:board {},
-                  :shot {},
-                  :ships []})
 
 (def bs-cell-get
   (fn [board coordinates]
@@ -159,3 +148,5 @@
 
 
 ;; Randomised ship setup
+(defn ai-move [me them]
+  me)
