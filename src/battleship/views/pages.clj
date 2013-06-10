@@ -3,8 +3,7 @@
   (:use [hiccup.form])
   (:use [hiccup.page :only [include-css include-js html5]])
   (:use [noir.core :only [defpartial]])
-  (:use [noir.core :only [defpage]])
-  (:require [battleship.models.controller :as controller]))
+  (:use [noir.core :only [defpage]]))
 
 (def empty-board [["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
                   ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
@@ -117,9 +116,9 @@
      content]]))
 
 ;; Start screen
-(defn start-screen []
+(defn start-screen [allies]
   (layout
-   [:div#board (make-placing-board empty-board)]
+   [:div#board (make-placing-board allies)]
    [:div#right-menu (fleet) (instruction)]
    ))
 
@@ -130,18 +129,16 @@
    [:div#right-menu (make-board empty-board "allies" false) (form-to [:get "/"](submit-button {:style "width: 63%; cursor: pointer;" :title "Restart the game"} "Retreat!!")) (instruction)]
    ))
 
-;;Waiting for controller. (TODO: Add controller :as controller)
-
 ;; Play screen
-(defn play-screen []
+(defn play-screen [axis allies]
   (layout
-   [:div#board (make-board (controller/get-board "axis") true)]
-   [:div#right-menu (make-board (controller/get-board "allies") false) (instruction)]
+   [:div#board (make-board axis true)]
+   [:div#right-menu (make-board allies false) (instruction)]
    ))
 
 ; End screen
-(defn end-screen []
+(defn end-screen [axis allies]
   (layout
-   [:div#board (make-board (controller/get-board "axis") true)]
-   [:div#right-menu (make-board (controller/get-board "allies") false) (game-over)]
+   [:div#board (make-board axis true)]
+   [:div#right-menu (make-board allies false) (game-over)]
    ))

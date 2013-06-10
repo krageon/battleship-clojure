@@ -20,6 +20,11 @@
                        :shot {}
                        :ships []})
 
+(defn get-board [player]
+  (if (= player "allies")
+    (model/bs-board (:board (cookies/get :allies)))
+    (model/bs-board (:board (cookies/get :axis)))))
+
 (defn put-ship [ship xy horizontal] ; (fn [player ship orientation coordinates]
   (cookies/put! :allies (model/bs-ship-put (cookies/get :allies) ship (model/coord-display-to-backend xy) horizontal)))
 
@@ -31,19 +36,14 @@
 
 (defn start-page []
   (reset-game!)
-  (view/start-screen))
-
-(defn get-board [player]
-  (if (= player "allies")
-    (model/bs-board (:board (cookies/get :allies)))
-    (model/bs-board (:board (cookies/get :axis)))))
+  (view/start-screen (get-board "axis")))
 
 (defn ai-move []
   (do
     (cookies/put! :axis (model/ai-move (cookies/get :axis) (cookies/get :allies)))
     (if (model/have-won? (cookies/get :axis))
-      (view/end-screen)
-      (view/play-screen))))
+      (view/end-screen (get-board "axis") (get-board "allies"))
+      (view/play-screen (get-board "axis") (get-board "allies")))))
 
 (defn shoot [coordinates] ; "A6"
   (do
