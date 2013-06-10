@@ -5,8 +5,13 @@
   (let [xcharoffset (int \A)]
     (fn [x]
       (let [letter (first x),
-            number ((comp str first rest) x)]
-        [(- (int letter) xcharoffset) (- (Integer/parseInt number) 1)]))))
+            number ((comp first rest) x)]
+        [(- (int letter) xcharoffset) (-
+                                       (if (or (= (type number) java.lang.Long)
+                                               (= (type number) java.lang.Integer))
+                                         number
+                                         (Integer/parseInt (str number)))
+                                       1)]))))
 
 ;; Printing the board
 
@@ -28,7 +33,7 @@
   (fn [board maxX y]
     (loop [x 0
            result []]
-      (if (<= x maxX)
+      (if (< x maxX)
           (recur (inc x) (assoc result (count result) (bs-cell-get board [x y])))
         result))))
 
