@@ -133,14 +133,14 @@
 
 ;; Play screen
 (defn play-screen []
-  (common/layout
+  (layout
    [:div#board (make-board (controller/get-board "axis") true)]
    [:div#right-menu (make-board (controller/get-board "allies") false) (instruction)]
    ))
 
 ; End screen
 (defn end-screen []
-  (common/layout
+  (layout
    [:div#board (make-board (controller/get-board "axis") true)]
    [:div#right-menu (make-board (controller/get-board "allies") false) (game-over)]
    ))
