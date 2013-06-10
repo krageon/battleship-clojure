@@ -49,6 +49,8 @@
         result
         (recur maxX (inc y) maxY (assoc result (count result) (bs-board-line board maxX y)))))))
 
+;(bs-board {:board {} :shot {} :ships []})
+
 ;; Picking ship locations
 (def ships [{:name "Aircraft Carrier"
              :amount 1
@@ -143,7 +145,7 @@
 
 ; TODO: unstub this
 (defn have-won? [player other]
-  false)
+  (every? (fn [x] (every? #(not= "o" %) x)) (bs-board player))
 
 ;; Randomised ship setup
 ; TODO: Make this work
