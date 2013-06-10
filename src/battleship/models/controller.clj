@@ -35,17 +35,17 @@
 (defn ai-move []
   (do
     (cookies/put! :axis (model/ai-move (cookies/get :axis) (cookies/get :allies)))
-    (if (model/have-won? (cookies/get :axis))
+    (if (model/have-won? (cookies/get :axis) (cookies/get :allies))
       (view/end-screen (get-board "axis") (get-board "allies"))
       (view/play-screen (get-board "axis") (get-board "allies")))))
 
 (defn shoot [coordinates] ; "A6"
   (do
     (cookies/put! :allies (model/bs-shoot (model/coord-display-to-backend coordinates) (cookies/get :allies) (cookies/get :axis)))
-    (if (model/have-won? (cookies/get :allies))
+    (if (model/have-won? (cookies/get :allies) (cookies/get :axis))
       (view/end-screen)
       (ai-move))))
 
 (defpage [:get "/"] [] (start-page))
 (defpage [:post "/"] {:keys [xy]} (shoot xy))
-(defpage [:post "/ships"] {:keys [ship xy horizontal]} (put-ships ship xy horizontal)
+(defpage [:post "/ships"] {:keys [ship xy horizontal]} (put-ship ship xy horizontal))

@@ -17,16 +17,16 @@
 
 (defn ships [] [{:name "Aircraft Carrier"
                  :amount "1"
-                 :size "5"}
+                 :size "5"},
                 {:name "Battleship"
                  :amount "1"
-                 :size "4"}
+                 :size "4"},
                 {:name "Cruiser"
                  :amount "1"
-                 :size "3"}
+                 :size "3"},
                 {:name "Destroyer"
                  :amount "2"
-                 :size "2"}
+                 :size "2"},
                 {:name "Submarine"
                  :amount "2"
                  :size "1"}

@@ -43,8 +43,6 @@
         result
         (recur maxX y maxY (assoc result (count result) [(bs-board-line board maxX y)]))))))
 
-(bs-board (:board bs-player-a))
-
 ;; Picking ship locations
 (def ships [{:name "Aircraft Carrier"
              :amount "1"
@@ -93,8 +91,6 @@
 (defn bs-player-ship-at [player ship]
   (.indexOf (:ships player) (bs-ship-get ship (:ships player))))
 
-;(bs-ship-is-available bs-player-a "taco")
-
 (defn bs-ship-put-is-legal? [player ship orientation coordinates]
   (if (and
        ((comp not nil?) (bs-ship-get ship))
@@ -108,11 +104,6 @@
           false)
         true))
     false))
-
-;(bs-ship-put bs-player-a "aircraft carrier" "horizontal" [1 1])
-
-;(bs-ship-put-is-legal? bs-player-a "aircraft carrier" "horizontal" [0 0]) ;=> true
-;(bs-ship-put-is-legal? bs-player-a "taco" "horizontal" [0 0]) ;=> false
 
 (def bs-ship-draw
   (fn [player ship orientation coordinates]
@@ -135,8 +126,6 @@
           (update-in p [:ships] #(into % [ship-to-add]))))
       player)))
 
-(bs-ship-put bs-player-a "aircraft carrier" "horizontal" [0 0])
-
 ;; Making a move
 (def bs-shoot
   (fn [coordinates player opponent]
@@ -146,6 +135,8 @@
                 shot))))
 
 
+(defn have-won? [player other]
+  false)
 
 ;; Randomised ship setup
 (defn ai-move [me them]
