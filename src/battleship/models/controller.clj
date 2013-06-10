@@ -19,9 +19,9 @@
 (defn blank-player [] {:board {},
                        :shot {}
                        :ships []})
+
 (defn put-ship [ship xy horizontal] ; (fn [player ship orientation coordinates]
   (cookies/put! :allies (model/bs-ship-put (cookies/get :allies) ship (model/coord-display-to-backend xy) horizontal)))
-
 
 (defn reset-game! []
   (do
@@ -53,5 +53,5 @@
       (ai-move))))
 
 (defpage [:get "/"] [] (start-page))
-(defpage [:post "/"] [] (shoot {}))
-(defpage [:post "/ships"] {:keys [ship xy horizontal]} (put-ships ship xy (= "true" horizontal)))
+(defpage [:post "/"] {:keys [xy]} (shoot xy))
+(defpage [:post "/ships"] {:keys [ship xy horizontal]} (put-ships ship xy horizontal)

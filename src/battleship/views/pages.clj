@@ -3,7 +3,8 @@
   (:use [hiccup.form])
   (:use [hiccup.page :only [include-css include-js html5]])
   (:use [noir.core :only [defpartial]])
-  (:use [noir.core :only [defpage]]))
+  (:use [noir.core :only [defpage]])
+  (:require [battleship.models.controller :as controller]))
 
 (def empty-board [["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
                   ["~" "~" "~" "~" "~" "~" "~" "~" "~" "~"]
