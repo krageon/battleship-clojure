@@ -15,3 +15,17 @@ lein run
 
 Distributed under the GNU Affero General Public License, at http://www.gnu.org/licenses/agpl-3.0.html
 
+# Battleship
+askjdkasjdas
+
+## Rules
+asdasd
+laskdkas
+
+# For tutor 
+```
+model
+then view
+then eat dumpling'
+google 'How to eat dumplings'
+```
