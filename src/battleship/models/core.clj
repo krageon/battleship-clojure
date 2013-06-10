@@ -137,14 +137,11 @@
 ;; Making a move
 (def bs-shoot
   (fn [coordinates player opponent]
-    [(assoc-in player [:shot coordinates]
-               (if (= boat (bs-cell-get (:board opponent)))
-                 hit
-                 shot))
-     (assoc-in opponent [:board coordinates]
-               (if (= boat (bs-cell-get (:board opponent)))
-                 hit
-                 shot))]))
+    (let [result (if (= boat (bs-cell-get (:board opponent) coordinates))
+                   hit
+                   shot)]
+    [(assoc-in player [:shot coordinates] result)
+     (assoc-in opponent [:board coordinates] result)])))
 
 (defn have-won? [player other]
   (every? (fn [x] (every? #(not= "o" %) x)) (bs-board other)))
@@ -163,6 +160,8 @@
           (recur (inc current) player-proposed)
           (recur current player)))
       player)))
+
+(def test-player {:board {} :shot {} :ships []})
 
 ;  CPU has a 5% hit chance ATM - this is a stupid fkn shot algorithm.
 ; TODO: Refactor into a diagonal hitscan with subsequent gap-fill to find the submarines - this simulates a moderately skilled player
