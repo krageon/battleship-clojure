@@ -179,7 +179,7 @@
          xM 10
          y 0
          yM 10]
-    (if (= "~" (((:board them) y) x))
+    (if (= "~" (((bs-board (:board them)) y) x))
       (bs-shoot [x y] me them)
       (if (< x xM)
         (recur (inc x) xM y yM)
