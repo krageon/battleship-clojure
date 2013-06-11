@@ -174,7 +174,7 @@
     (func me them)
     (catch Exception e
       (.printStackTrace e)
-      (func me them))))
+      [me them])))
 
 
 (defn ai-miss [me them]
