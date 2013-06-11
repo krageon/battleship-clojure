@@ -36,18 +36,18 @@
   (fn [board maxX y]
     (loop [x 0
            result []]
-      (if (< x maxX)
-        (recur (inc x) (assoc result (count result) (bs-cell-get board [x y])))
-        result))))
+      (if (>= x maxX)
+        result
+        (recur (inc x) (assoc result (count result) (bs-cell-get board [x y])))))))
 
 ; converting a board (a sparse array-thing) to a string, filling in the gaps
 (def bs-board
   (fn [board]
-    (loop [maxX 10
+    (loop [maxX 9
            y 0
-           maxY 10
+           maxY 9
            result []]
-      (if (> y maxY)
+      (if (>= y maxY)
         result
         (recur maxX (inc y) maxY (assoc result (count result) (bs-board-line board maxX y)))))))
 
