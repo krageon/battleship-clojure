@@ -40,7 +40,6 @@
                             (make-row yCoord row with-submit?))
                           board)])))
 
-
 ;; Partial pages
 (defn instruction[]
   (html

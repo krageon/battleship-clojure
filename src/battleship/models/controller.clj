@@ -65,19 +65,21 @@
 
 (defn shoot [coordinates] ; "A6"
   (do
-    (println "shoot")
     (let [result (model/bs-shoot (model/coord-display-to-backend coordinates) (load-key :allies) (load-key :axis))]
       (save-key :allies (result 0))
       (save-key :axis (result 1)))
-    (if (model/have-won? (load-key :allies) (load-key :axis))
-      (view/end-screen (get-board "axis") (get-board "allies"))
-      (ai-shoot))))
+    (next-turn)))
+
+(defn next-turn []
+  (if (model/have-won? (load-key :allies) (load-key :axis))
+    (view/end-screen (get-board "axis") (get-board "allies"))
+    (ai-shoot)))
 
 (defpage [:get "/"] {} (start-page))
 (defpage [:post "/ships"] {:keys [name xy horizontal]} (put-ship name xy horizontal))
-(defpage [:get "/play"] {} (view/play-screen (get-shot "allies") (get-board "allies")))
-(defpage [:get "/shoot"] {} (view/play-screen (get-shot "allies") (get-board "allies")))
+(defpage [:get "/play"] {} (next-turn))
+(defpage [:get "/shoot"] {} (next-turn))
 (defpage [:post "/shoot"] {:keys [xy]}
   (if (nil? xy)
-    (do (println "is leeg") (view/play-screen (get-shot "allies") (get-board "allies")))
+    (do (println "is leeg") (next-turn))
     (shoot xy)))
