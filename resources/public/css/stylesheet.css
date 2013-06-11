@@ -281,9 +281,9 @@ img {
   margin-right: 50px;
 }
 
-#wrapper #right-menu{
-  width: 325 px;
-  max-width: 387 px;
+html body div#wrapper div#right-menu{
+  width: 330 px;
+  max-width: 330 px !important;
   float: left;
 }
 
@@ -291,7 +291,7 @@ div#wrapper table#axis input[value="~"]:hover, div#wrapper table#your input:hove
 	cursor:pointer;
 }
 
-div#wrapper table#allies{
+div#wrapper table#your{
   font-size: 8px;
   padding: 4px 5px;
 }
