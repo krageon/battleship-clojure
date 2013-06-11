@@ -192,7 +192,7 @@
   (let [board (:board them)
         hit ((first (filter #(= "o" (% 1)) (seq board))) 0)]
     (if (nil? hit)
-      (ai-try ai-miss me them)
+      (ai-miss me them)
       (bs-shoot hit me them))))
 
 (defn ai-shoot [me them]
