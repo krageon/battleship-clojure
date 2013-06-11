@@ -146,7 +146,7 @@
      (assoc-in opponent [:board coordinates] result)])))
 
 (defn have-won? [player other]
-  (every? (fn [x] (every? #(not= "o" %) x)) (bs-board other)))
+  (every? (fn [x] (every? #(not= "o" %) x)) (bs-board (:board other))))
 
 ;; Randomised ship setup
 (def test-player {:board {} :shot {} :ships []})
