@@ -112,38 +112,40 @@ $(document).ready(function() {
         var name = $(this).attr('ship');
         var version = $(this).attr('version');
         var size = $(this).attr('size');
-        var horizontal = $(this).attr('horizontal') == 'true';
+        var horizontal = $(this).attr('horizontal') === 'true';
         var canSet = true;
 
         if(horizontal){
           if((parseInt(posArray)+parseInt(size)) > letters.length){ alert('Cannot change direction, there is no space!');}
           else{
-            for(i = 1; i < size+1; i++){
+            for(i = 1; i < (parseInt(size)+1); i++){
               if($('input[name="'+letters[(posArray+i)]+xCoord+'"]').val() === "o"){
+                console.log('is horizontal this is the place: '+letters[(posArray+i)]+xCoord);
                 alert('Cannot change direction, there is already a ship in place');
                 canSet = false; break;return false;
               }
             }
             if(canSet){
               removeShipByName(name, version);
-              for(i = 0; i < size; i++){
+              for(i = 0; i < parseInt(size); i++){
                 $currentShip = $('input[name="'+letters[(parseInt(posArray)+i)]+xCoord+'"]');
                 setAttribute(name, version, "o", yCoord+xCoord, false, size);
               }
             }
           }
         }else{
-          if(parseInt(xCoord)+(size-1) > 10){ alert('Cannot change direction, there is no space!');}
+          if(parseInt(xCoord)+(parseInt(size)-1) > 10){ alert('Cannot change direction, there is no space!');}
           else{
-            for(i = 1; i < size+1; i++){
+            for(i = 1; i < (parseInt(size)+1); i++){
               if($('input[name="'+yCoord+(parseInt(xCoord)+i)+'"]').val() === "o"){
+                console.log('is vertical this is the place: '+yCoord+(parseInt(xCoord)+i));
                 alert('Cannot change direction, there is already a ship in place');
                 canSet = false; break;return false;
               }
             }
             if(canSet){
               removeShipByName(name, version)
-              for(i = 0; i < size; i++){
+              for(i = 0; i < parseInt(size); i++){
                 $currentShip = $('input[name="'+yCoord+(parseInt(xCoord)+i)+'"]');
                 setAttribute(name, version, "o", yCoord+xCoord, true, size);
               }
