@@ -64,7 +64,7 @@
       (save-key :axis (result 0)))
     (if (model/have-won? (load-key :axis) (load-key :allies))
       (view/end-screen (get-board "axis") (get-board "allies"))
-      (play-screen))))
+      (play-page))))
 
 (defn next-turn []
   (if (model/have-won? (load-key :allies) (load-key :axis))
@@ -80,7 +80,7 @@
 
 (defpage [:get "/"] {} (start-page))
 (defpage [:post "/ships"] {:keys [name xy horizontal]} (put-ship name xy horizontal))
-(defpage [:get "/play"] {} (play-screen))
+(defpage [:get "/play"] {} (play-page))
 (defpage [:get "/shoot"] {} (next-turn))
 (defpage [:post "/shoot"] {:keys [xy]}
   (if (nil? xy)
