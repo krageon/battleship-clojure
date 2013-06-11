@@ -167,9 +167,23 @@
 ;  CPU has a 5% hit chance ATM - this is a stupid fkn shot algorithm.
 ; TODO: Refactor into a diagonal hitscan with subsequent gap-fill to find the submarines - this simulates a moderately skilled player
 ;         and isn't cheaty like this
+(defn ai-hit [me them]
+  (let [board (:board them)
+        hit ((first (filter #(= "o" (% 1)) (seq board))) 0)]
+    (bs-shoot hit me them)))
+
+(defn ai-miss [me them]
+  (loop [x 0
+         xM 10
+         y 0
+         yM 10]
+    (if (= "~" (((:board them) y) x))
+      (bs-shoot [x y] me them)
+      (if (< x xM)
+        (recur (inc x) xM y yM)
+        (recur 0 xM (inc y) yM)))))
+
 (defn ai-shoot [me them]
   (if (> 5 (rand-int 100))
-    (let [board (:board them)
-          hit ((first (filter #(= "o" (% 1)) (seq board))) 0)]
-      (bs-shoot hit me them))
-    [me them]))
+    (ai-hit me them)
+    (ai-miss me them)))
