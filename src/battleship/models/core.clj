@@ -198,6 +198,6 @@
 
 
 (defn ai-shoot [me them]
-  (if (> 5 (rand-int 100))
+  (if (> 10 (rand-int 100))
     (ai-try ai-hit me them)
     (ai-try ai-miss me them)))
