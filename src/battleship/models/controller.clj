@@ -54,7 +54,7 @@
     (view/start-screen (get-board "allies") model/ships)))
 
 (defn play-page []
-  (view/play-screen (view/play-screen (get-shot "allies") (get-board "allies"))))
+  (view/play-screen (get-shot "allies") (get-board "allies")))
 
 (defn ai-shoot []
   (do
