@@ -319,7 +319,7 @@ table input[value="x"], table td[value="x"]{
   background-color: rgb(184, 227, 186);
 }
 
-table#allies input[value="x"]{
+table#your td[value="x"]{
   background-color: rgb(227, 188, 185);
 }
 
