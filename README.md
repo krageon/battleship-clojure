@@ -28,6 +28,16 @@ The attacking player notes the hit or miss on their own "tracking" grid, in orde
 When all of the squares of a ship have been hit, the ship is sunk, and the ship's owner announces this (e.g. "You sunk my battleship!"). 
 If all of a player's ships have been sunk, the game is over and their opponent wins.
 
+## How To Play
+```bash
+place ships
+'go to battle'
+click things to shoot them
+try to hit more things than the other guy
+```
+
+
+
 # For tutor 
 ```
 model
@@ -43,13 +53,6 @@ If you use cake, substitute 'lein' with 'cake' below. Everything should work fin
 ```bash
 lein deps
 lein run
-```
-
-## How To Play
-```place ships
-'go to battle'
-click things to shoot them
-try to hit more things than the other guy
 ```
 
 ## License
