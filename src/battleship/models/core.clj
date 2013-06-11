@@ -176,6 +176,7 @@
       (.printStackTrace e)
       (func me them))))
 
+
 (defn ai-miss [me them]
   (loop [x 0
          xM 9
@@ -183,9 +184,9 @@
          yM 9]
     (if (= "~" (((bs-board (:board them)) y) x))
       (bs-shoot [x y] me them)
-      (if (> x xM)
+      (if (>= x xM)
         (recur 0 xM (inc y) yM)
-          (recur (inc x) xM y yM)))))
+        (recur (inc x) xM y yM)))))
 
 (defn ai-hit [me them]
   (let [board (:board them)
