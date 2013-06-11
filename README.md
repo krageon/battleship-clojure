@@ -3,7 +3,6 @@ This is an implementation of battleship in noir.
 Battleship (also Battleships or Sea Battle) is a guessing game for two players. It is known worldwide as a pencil and paper game which dates from World War I. 
 It was published by various companies as a pad-and-pencil game in the 1930s, and was released as a plastic board game by Milton Bradley in 1967.
 
-
 ## Rules
 The game is played on four grids, two for each player. The grids are typically square – usually 10×10 – and the individual squares in the grid are identified by letter and number.
  On one grid the player arranges ships and records the shots by the opponent. On the other grid the player records his/her own shots.
@@ -38,13 +37,19 @@ google 'How to eat dumplings'
 ```
 
 # General
-## Usage
-
+## Running
 If you use cake, substitute 'lein' with 'cake' below. Everything should work fine.
 
 ```bash
 lein deps
 lein run
+```
+
+## How To Play
+```place ships
+'go to battle'
+click things to shoot them
+try to hit more things than the other guy
 ```
 
 ## License
