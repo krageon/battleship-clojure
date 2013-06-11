@@ -53,6 +53,9 @@
     (reset-game!)
     (view/start-screen (get-board "allies") model/ships)))
 
+(defn play-page []
+  (view/play-screen (view/play-screen (get-shot "allies") (get-board "allies"))))
+
 (defn ai-shoot []
   (do
     (println "ai-shoot")
@@ -61,7 +64,7 @@
       (save-key :axis (result 0)))
     (if (model/have-won? (load-key :axis) (load-key :allies))
       (view/end-screen (get-board "axis") (get-board "allies"))
-      (view/play-screen (get-shot "allies") (get-board "allies")))))
+      (play-screen))))
 
 (defn next-turn []
   (if (model/have-won? (load-key :allies) (load-key :axis))
@@ -77,7 +80,7 @@
 
 (defpage [:get "/"] {} (start-page))
 (defpage [:post "/ships"] {:keys [name xy horizontal]} (put-ship name xy horizontal))
-(defpage [:get "/play"] {} (next-turn))
+(defpage [:get "/play"] {} (play-screen))
 (defpage [:get "/shoot"] {} (next-turn))
 (defpage [:post "/shoot"] {:keys [xy]}
   (if (nil? xy)
