@@ -191,7 +191,7 @@
          yM 9]
     (if (= "~" (((bs-board (:board them)) y) x))
       (bs-shoot [x y] me them)
-      (if (>= x xM)
+      (if (> x xM)
         (recur 0 xM (inc y) yM)
           (recur (inc x) xM y yM)))))
 
