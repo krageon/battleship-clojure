@@ -174,7 +174,8 @@
     (func me them)
     (catch Exception e
       (.printStackTrace e)
-      (func me them))))
+      [me them])))
+
 
 (defn ai-miss [me them]
   (loop [x 0
@@ -183,15 +184,15 @@
          yM 9]
     (if (= "~" (((bs-board (:board them)) y) x))
       (bs-shoot [x y] me them)
-      (if (> x xM)
+      (if (>= x xM)
         (recur 0 xM (inc y) yM)
-          (recur (inc x) xM y yM)))))
+        (recur (inc x) xM y yM)))))
 
 (defn ai-hit [me them]
   (let [board (:board them)
         hit ((first (filter #(= "o" (% 1)) (seq board))) 0)]
     (if (nil? hit)
-      (ai-try ai-miss me them)
+      (ai-miss me them)
       (bs-shoot hit me them))))
 
 (defn ai-shoot [me them]
