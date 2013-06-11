@@ -128,7 +128,7 @@ $(document).ready(function() {
               removeShipByName(name, version);
               for(i = 0; i < size; i++){
                 $currentShip = $('input[name="'+letters[(parseInt(posArray)+i)]+xCoord+'"]');
-                setAttribute(name, version, "o", coord+"1", false, size);
+                setAttribute(name, version, "o", yCoord+xCoord, false, size);
               }
             }
           }
@@ -163,6 +163,7 @@ $(document).ready(function() {
       }else{
         var xButton = buttonCoord.charAt(1);
       }
+      $currentShip.attr('start', yButton+xButton);
       var posArray = $.inArray(yButton, letters);
 
       if(horizontal){
