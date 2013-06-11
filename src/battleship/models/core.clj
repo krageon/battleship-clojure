@@ -181,9 +181,11 @@
          yM 10]
     (if (= "~" (((bs-board (:board them)) y) x))
       (bs-shoot [x y] me them)
-      (if (< x xM)
-        (recur (inc x) xM y yM)
-        (recur 0 xM (inc y) yM)))))
+      (if (>= y yM)
+        (ai-hit me them) ; error handling! :D
+        (if (>= x xM)
+          (recur 0 xM (inc y) yM)
+          (recur (inc x) xM y yM))))))
 
 (defn ai-shoot [me them]
   (if (> 5 (rand-int 100))
