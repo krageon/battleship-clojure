@@ -36,7 +36,7 @@
   (fn [board maxX y]
     (loop [x 0
            result []]
-      (if (>= x maxX)
+      (if (> x maxX)
         result
         (recur (inc x) (assoc result (count result) (bs-cell-get board [x y])))))))
 
@@ -47,7 +47,7 @@
            y 0
            maxY 9
            result []]
-      (if (>= y maxY)
+      (if (> y maxY)
         result
         (recur maxX (inc y) maxY (assoc result (count result) (bs-board-line board maxX y)))))))
 
