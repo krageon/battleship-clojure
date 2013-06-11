@@ -5,14 +5,16 @@
   (let [xcharoffset (int \A)]
     (fn [x]
       (let [letter (first x),
-            number ((comp first rest) x)]
-        [(-
-          (if (or (= (type number) java.lang.Long)
-                  (= (type number) java.lang.Integer))
-            number
-            (Integer/parseInt (str number)))
-          1)
-         (- (int letter) xcharoffset)]))))
+            number ((comp first rest) x)
+            result [(-
+                     (if (or (= (type number) java.lang.Long)
+                             (= (type number) java.lang.Integer))
+                       number
+                       (Integer/parseInt (str number)))
+                     1)
+                    (- (int letter) xcharoffset)]]
+        (println result)
+        result))))
 
 ;; Printing the board
 

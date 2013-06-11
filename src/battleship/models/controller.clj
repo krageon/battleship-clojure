@@ -63,17 +63,17 @@
       (view/end-screen (get-board "axis") (get-board "allies"))
       (view/play-screen (get-shot "allies") (get-board "allies")))))
 
+(defn next-turn []
+  (if (model/have-won? (load-key :allies) (load-key :axis))
+    (view/end-screen (get-board "axis") (get-board "allies"))
+    (ai-shoot)))
+
 (defn shoot [coordinates] ; "A6"
   (do
     (let [result (model/bs-shoot (model/coord-display-to-backend coordinates) (load-key :allies) (load-key :axis))]
       (save-key :allies (result 0))
       (save-key :axis (result 1)))
     (next-turn)))
-
-(defn next-turn []
-  (if (model/have-won? (load-key :allies) (load-key :axis))
-    (view/end-screen (get-board "axis") (get-board "allies"))
-    (ai-shoot)))
 
 (defpage [:get "/"] {} (start-page))
 (defpage [:post "/ships"] {:keys [name xy horizontal]} (put-ship name xy horizontal))
