@@ -176,9 +176,9 @@
 
 (defn ai-miss [me them]
   (loop [x 0
-         xM 10
+         xM 9
          y 0
-         yM 10]
+         yM 9]
     (if (= "~" (((bs-board (:board them)) y) x))
       (bs-shoot [x y] me them)
       (if (>= y yM)
