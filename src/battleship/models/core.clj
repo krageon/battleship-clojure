@@ -176,16 +176,6 @@
       (.printStackTrace e)
       (func me them))))
 
-
-(defn ai-hit [me them]
-  (let [board (:board them)
-        hit ((first (filter #(= "o" (% 1)) (seq board))) 0)]
-    (if (nil? hit)
-      (ai-miss me them)
-      (bs-shoot hit me them))))
-
-
-
 (defn ai-miss [me them]
   (loop [x 0
          xM 9
@@ -197,7 +187,12 @@
         (recur 0 xM (inc y) yM)
           (recur (inc x) xM y yM)))))
 
-
+(defn ai-hit [me them]
+  (let [board (:board them)
+        hit ((first (filter #(= "o" (% 1)) (seq board))) 0)]
+    (if (nil? hit)
+      (ai-try ai-miss me them)
+      (bs-shoot hit me them))))
 
 (defn ai-shoot [me them]
   (if (> 10 (rand-int 100))
