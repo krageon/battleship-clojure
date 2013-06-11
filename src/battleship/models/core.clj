@@ -172,7 +172,9 @@
 (defn ai-try [func me them]
   (try
     (func me them)
-    (catch Exception e [me them])))
+    (catch Exception e
+      (.printStackTrace e)
+      (func me them))))
 
 
 (defn ai-hit [me them]
