@@ -5,7 +5,7 @@
   (let [xcharoffset (int \A)]
     (fn [x]
       (let [letter (first x),
-            number ((comp first rest) x)
+            number (.substring x 1)
             result [(-
                      (if (or (= (type number) java.lang.Long)
                              (= (type number) java.lang.Integer))
